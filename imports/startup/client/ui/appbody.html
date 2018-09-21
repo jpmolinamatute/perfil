@@ -1,0 +1,11 @@
+<template name="appbody">
+    {{#if Template.subscriptionsReady}}
+        <div id="layout-main">
+            <div id="layout-header"></div>
+            <div id="layout-body">
+                {{> Template.dynamic template=name data=obj}}
+            </div>
+            <footer></footer>
+        </div>
+    {{/if}}
+</template>

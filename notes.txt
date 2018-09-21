@@ -1,0 +1,6 @@
+existen varias configuraciones, cada configuracion va a llamar un wizard con pasos especificos. Los pasos se pueden reusar en diferentes configuracione
+
+opcion global para seleccionar systema internacional o systema imperial
+
+
+poner todos los this.subscribe() en el template principal asi como el waitfor...

@@ -1,0 +1,40 @@
+<template name="step1section">
+    <h3>{{title}}</h3>
+    <div class="form-group">
+        <label for="{{name}}-perfil">Perfil</label>
+        <select class="form-control" id="{{name}}-perfil" data-field="{{name}}perfil">
+            <option value="">-- Select One --</option>
+            {{#each perfilList}}
+                <option value="{{_id}}">{{_id}}</option>
+            {{/each}}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="{{name}}-material">Material</label>
+        <select class="form-control" id="{{name}}-material" data-field="{{name}}material">
+            <option value="">-- Select One --</option>
+            {{#each materialList}}
+                <option value="{{_id}}">{{_id}}</option>
+            {{/each}}
+        </select>
+    </div>
+    {{#if showSVG name}}
+        <svg viewBox="0 0 {{containerWidth}} 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="0" y1="80" x2="100" y2="20" stroke="black" />
+            <line x1="0" y1="80" x2="100" y2="20" stroke="black" />
+            <line x1="0" y1="80" x2="100" y2="20" stroke="black" />
+            <line x1="0" y1="80" x2="100" y2="20" stroke="black" />
+            <line x1="0" y1="80" x2="100" y2="20" stroke="black" />
+            <line x1="0" y1="80" x2="100" y2="20" stroke="black" />
+            <line x1="0" y1="80" x2="100" y2="20" stroke="black" />
+            <line x1="0" y1="80" x2="100" y2="20" stroke="black" />
+            <line x1="0" y1="80" x2="100" y2="20" stroke="black" />
+            <line x1="0" y1="80" x2="100" y2="20" stroke="black" />
+            <line x1="0" y1="80" x2="100" y2="20" stroke="black" />
+            <line x1="0" y1="80" x2="100" y2="20" stroke="black" />
+            <line x1="0" y1="80" x2="100" y2="20" stroke="black" />
+            <line x1="0" y1="80" x2="100" y2="20" stroke="black" />
+            <line x1="0" y1="80" x2="100" y2="20" stroke="black" />
+        </svg>
+    {{/if}}
+</template>
