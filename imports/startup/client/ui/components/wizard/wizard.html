@@ -46,7 +46,8 @@
                     <button type="button" data-action="prev" class="prev btn btn-primary">Anterior</button>
                 {{/if}}
                 {{#if isLast}}
-                    <button type="button" data-action="calcular" class="calcular btn btn-primary">Imprimir</button>
+                    <button type="button" data-action="calcular" class="calcular btn btn-primary {{#if isDisabled}}disabled{{/if}}"
+                        disabled="{{isDisabled}}">Imprimir</button>
                 {{else}}
                     <button type="button" data-action="next" class="calcular btn btn-primary">Siguiente</button>
                 {{/if}}

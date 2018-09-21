@@ -144,19 +144,19 @@ export default class PerfilClass {
         return { x, y };
     }
 
-    getProporcionatedPoint(point, axis) {
-        const validPoint = Match.Where((x) => {
-            check(x, Number);
-            return x >= 0 && x <= 15;
-        });
-        const validAxis = Match.Where((x) => {
-            check(x, String);
-            return x === 'x' || x === 'y';
-        });
-        check(point, validPoint);
-        check(axis, validAxis);
-        return this[`point${point}`]()[axis];
-    }
+    // getAnyPoint(point, axis) {
+    //     const validPoint = Match.Where((x) => {
+    //         check(x, Number);
+    //         return x >= 0 && x <= 15;
+    //     });
+    //     const validAxis = Match.Where((x) => {
+    //         check(x, String);
+    //         return x === 'x' || x === 'y';
+    //     });
+    //     check(point, validPoint);
+    //     check(axis, validAxis);
+    //     return this[`point${point}`]()[axis];
+    // }
 
     getFileContent() {
         const point1 = this.point1();
@@ -188,13 +188,43 @@ export default class PerfilClass {
         return window.URL.createObjectURL(blob);
     }
 
-    getWidth() {
-        return this.bf;
-    }
 
-    getHeight() {
-        //         p2 y p8           p5
-        // return (this.tf * 2) + (this.d - this.z) + (0 * 2);
-        return this.d;
+    getSVG() {
+        return {
+            width: this.bf,
+            heigth: this.d,
+            x0: this.point0().x,
+            y0: this.point0().y,
+            x1: this.point1().x,
+            y1: this.point1().y,
+            x2: this.point2().x,
+            y2: this.point2().y,
+            x3: this.point3().x,
+            y3: this.point3().y,
+            x4: this.point4().x,
+            y4: this.point4().y,
+            x5: this.point5().x,
+            y5: this.point5().y,
+            x6: this.point6().x,
+            y6: this.point6().y,
+            x7: this.point7().x,
+            y7: this.point7().y,
+            x8: this.point8().x,
+            y8: this.point8().y,
+            x9: this.point9().x,
+            y9: this.point9().y,
+            x10: this.point10().x,
+            y10: this.point10().y,
+            x11: this.point11().x,
+            y11: this.point11().y,
+            x12: this.point12().x,
+            y12: this.point12().y,
+            x13: this.point13().x,
+            y13: this.point13().y,
+            x14: this.point14().x,
+            y14: this.point14().y,
+            x15: this.point15().x,
+            y15: this.point15().y
+        };
     }
 }

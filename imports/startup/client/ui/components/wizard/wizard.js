@@ -50,6 +50,9 @@ Template.wizard.helpers({
             _id: Template.instance().docID,
             collection: Template.instance().collection
         };
+    },
+    isDisabled() {
+        return true;
     }
 });
 

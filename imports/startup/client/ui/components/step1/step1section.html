@@ -3,7 +3,9 @@
     <div class="form-group">
         <label for="{{name}}-perfil">Member</label>
         <select class="form-control" id="{{name}}-perfil" data-field="{{name}}" data-subfield="perfil">
-            <option value="" selected="{{isSelected ../collection ../collectionID name 'perfil'}}">-- Select One --</option>
+            <option value="" selected="{{isSelected collection collectionID name 'perfil' undefined}}">-- Select
+                One
+                --</option>
             {{#each perfilList}}
                 <option value="{{_id}}" selected="{{isSelected ../collection ../collectionID ../name 'perfil' _id}}">{{_id}}</option>
             {{/each}}
@@ -12,7 +14,8 @@
     <div class="form-group">
         <label for="{{name}}-material">Material</label>
         <select class="form-control" id="{{name}}-material" data-field="{{name}}" data-subfield="material">
-            <option value="" selected="{{isSelected ../collection ../collectionID name 'material'}}">-- Select One --</option>
+            <option value="" selected="{{isSelected collection collectionID name 'material' undefined}}">-- Select One
+                --</option>
             {{#each materialList}}
                 <option value="{{_id}}" selected="{{isSelected ../collection ../collectionID ../name 'material' _id}}">{{_id}}</option>
             {{/each}}
@@ -21,27 +24,25 @@
     {{#if showSVG name}}
         {{#with perfilBean name}}
             <svg width="{{width}}" heigth="{{heigth}}" viewBox="0 0 {{width}} {{heigth}}" xmlns="http://www.w3.org/2000/svg">
-
                 <path fill="red" stroke="red" d="
                                 M {{x0}},{{y0}} H {{x1}}
                                 V {{y2}}
                                 H {{x3}}
-                                L {{x4}},{{y4}} {{! curve1}}
+                                L {{x4}},{{y4}}
                                 V {{y5}}
-                                L {{x6}},{{y6}} {{! curve2}}
+                                L {{x6}},{{y6}}
                                 H {{x7}}
                                 V{{y8}}
                                 H {{x9}}
                                 V {{y10}}
                                 H {{x11}}
-                                L {{x12}},{{y12}} {{! curve3}}
+                                L {{x12}},{{y12}}
                                 V {{y13}}
-                                L {{x14}},{{y14}} {{! curve4}}
+                                L {{x14}},{{y14}}
                                 H {{x15}}
                                 V {{y0}}
                                 Z" />
             </svg>
         {{/with}}
-        {{!-- </svg> --}}
     {{/if}}
 </template>
