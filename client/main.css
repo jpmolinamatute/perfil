@@ -86,9 +86,9 @@ div#wizard-left-panel ul button {
 
 div#step1 {
     width: 100%;
+    min-height: 100%;
     display: flex;
     flex-direction: row;
-    background-color: yellow;
 }
 
 div#step2 {
@@ -131,4 +131,10 @@ div#step1-right-beam {
 div#step1-right-beam div.form-group {
     display: inline-block;
     width: 49%;
+}
+
+div#step1 svg {
+    display: block;
+    /* margin-bottom: 15px; */
+    margin: 0 auto 15px;
 }

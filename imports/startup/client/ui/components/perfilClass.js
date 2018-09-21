@@ -46,6 +46,14 @@ export default class PerfilClass {
         this.z = this.tf + this.r;
     }
 
+    /* eslint-disable class-methods-use-this */
+    point0() {
+        const x = 0;
+        const y = 0;
+        return { x, y };
+    }
+
+    /* eslint-enable class-methods-use-this */
     point1() {
         const x = this.bf;
         const y = 0;
@@ -136,6 +144,20 @@ export default class PerfilClass {
         return { x, y };
     }
 
+    getProporcionatedPoint(point, axis) {
+        const validPoint = Match.Where((x) => {
+            check(x, Number);
+            return x >= 0 && x <= 15;
+        });
+        const validAxis = Match.Where((x) => {
+            check(x, String);
+            return x === 'x' || x === 'y';
+        });
+        check(point, validPoint);
+        check(axis, validAxis);
+        return this[`point${point}`]()[axis];
+    }
+
     getFileContent() {
         const point1 = this.point1();
         const point2 = this.point2();
@@ -164,5 +186,15 @@ export default class PerfilClass {
             endings: 'native'
         });
         return window.URL.createObjectURL(blob);
+    }
+
+    getWidth() {
+        return this.bf;
+    }
+
+    getHeight() {
+        //         p2 y p8           p5
+        // return (this.tf * 2) + (this.d - this.z) + (0 * 2);
+        return this.d;
     }
 }

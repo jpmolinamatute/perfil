@@ -1,0 +1,69 @@
+[{
+	"_id": "Area",
+	"unit": "cm\u0026#178;"
+},
+{
+	"_id": "Ix",
+	"unit": "cm4"
+},
+{
+	"_id": "Iy",
+	"unit": "cm4"
+},
+{
+	"_id": "K",
+	"unit": "mm"
+},
+{
+	"_id": "Peso",
+	"unit": "kg/m"
+},
+{
+	"_id": "Sx",
+	"unit": "cm\u0026#179;"
+},
+{
+	"_id": "Sy",
+	"unit": "cm\u0026#179;"
+},
+{
+	"_id": "Zx",
+	"unit": "cm\u0026#179;"
+},
+{
+	"_id": "Zy",
+	"unit": "cm\u0026#179;"
+},
+{
+	"_id": "bf",
+	"unit": "mm"
+},
+{
+	"_id": "d",
+	"unit": "mm"
+},
+{
+	"_id": "h",
+	"unit": "mm"
+},
+{
+	"_id": "r",
+	"unit": "mm"
+},
+{
+	"_id": "rx",
+	"unit": "cm"
+},
+{
+	"_id": "ry",
+	"unit": "cm"
+},
+{
+	"_id": "tf",
+	"unit": "mm"
+},
+{
+	"_id": "tw",
+	"unit": "mm"
+}]
+

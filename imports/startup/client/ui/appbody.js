@@ -10,7 +10,7 @@ Template.appbody.helpers({
         return {
             list: [
                 {
-                    subTitle: 'Step 1',
+                    subTitle: 'Step 1: Select column and beams with their respective material.',
                     template: 'step1',
                     help: `<p> Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quibusdam natus,
                                 necessitatibus obcaecati eveniet harum impedit molestiae! Rerum veniam, perferendis
