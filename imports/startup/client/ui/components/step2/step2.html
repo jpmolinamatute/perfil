@@ -1,5 +1,15 @@
 <template name="step2">
     <div id="step2">
-        <p>Step 2</p>
+        <div class="step2section">
+            {{#with left}}
+                {{> step2section}}
+            {{/with}}
+        </div>
+        <div class="step2section">
+            {{#with right}}
+                {{> step2section}}
+            {{/with}}
+        </div>
+
     </div>
 </template>
