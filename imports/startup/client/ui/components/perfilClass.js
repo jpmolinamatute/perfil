@@ -175,7 +175,19 @@ export default class PerfilClass {
         const point14 = this.point14();
         const point15 = this.point15();
         /* eslint-disable max-len */
-        return `linea ${point14.x},${point14.y} ${point15.x},${point15.y} 0,0 ${point1.x},${point1.y} ${point2.x},${point2.y} ${point3.x},${point3.y}  linea ${point13.x},${point13.y} ${point12.x},${point12.y}  linea ${point4.x},${point4.y} ${point5.x},${point5.y}  linea ${point6.x},${point6.y} ${point7.x},${point7.y} ${point8.x},${point8.y} ${point9.x},${point9.y} ${point10.x},${point10.y} ${point11.x},${point11.y}  zoom e empalme ra ${this.r}  ${point3.x},${point3.y}  ${point4.x},${point4.y}  ${point5.x},${point5.y}  ${point6.x},${point6.y}  ${point11.x},${point11.y}  ${point12.x},${point12.y}  ${point13.x},${point13.y}  ${point14.x},${point14.y} zoom 0.9x `;
+        return `GRIDMODE 0
+SNAPMODE 0
+ORTHO OFF
+ISODRAFT O
+AUTOSNAP 0
+OSNAP NONE
+line ${point14.x},${point14.y} ${point15.x},${point15.y} 0,0 ${point1.x},${point1.y} ${point2.x},${point2.y} ${point3.x},${point3.y} 
+line ${point13.x},${point13.y} ${point12.x},${point12.y} 
+line ${point4.x},${point4.y} ${point5.x},${point5.y} 
+line ${point6.x},${point6.y} ${point7.x},${point7.y} ${point8.x},${point8.y} ${point9.x},${point9.y} ${point10.x},${point10.y} ${point11.x},${point11.y} 
+zoom w -10,-10 ${this.bf + 10},${this.d + 10}
+fillet R ${this.r}  ${point3.x},${point3.y}  ${point4.x},${point4.y}  ${point5.x},${point5.y}  ${point6.x},${point6.y}  ${point11.x},${point11.y}  ${point12.x},${point12.y}  ${point13.x},${point13.y}  ${point14.x},${point14.y}
+zoom 0.9x `;
         /* eslint-enable max-len */
     }
 

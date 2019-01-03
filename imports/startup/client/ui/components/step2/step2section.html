@@ -1,17 +1,14 @@
 <template name="step2section">
-    <p>{{name}}</p>
-    <dl>
-        <dt>Material</dt>
-        <dd>{{material}}</dd>
-        <dt>Cpr</dt>
-        <dd>{{cpr}}</dd>
-        <dt>Ry</dt>
-        <dd>{{Ry}}</dd>
-        <dt>Fy</dt>
-        <dd>{{Fy}}</dd>
-        <dt>Fu</dt>
-        <dd>{{Fu}}</dd>
-        <dt>Ze</dt>
-        <dd>{{Zx}}</dd>
-    </dl>
+    {{#with material}}
+        <ul>
+            <li><span>Cpr</span> = {{cpr}}</li>
+            <li><span>Ry</span> = {{Ry}}</li>
+            <li><span>Fy</span> = {{Fy}}Kgf/cm<sup>2</sup></li>
+            <li><span>Fu</span> = {{Fu}}Kgf/cm<sup>2</sup></li>
+            {{#if Zx}}
+                <li><span>Ze</span> = {{Zx}}cm<sup>3</sup></li>
+                <li><span>Mpr</span> = {{mpr cpr}}Kgfm</li>
+            {{/if}}
+        </ul>
+    {{/with}}
 </template>

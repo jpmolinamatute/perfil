@@ -1,6 +1,6 @@
 import './step1section.html';
 import { perfil, materials } from '../../../../both/collections.js';
-import PerfilClass from '../perfilClass.js';
+// import PerfilClass from '../perfilClass.js';
 
 Template.step1section.helpers({
     perfilList() {
@@ -9,33 +9,8 @@ Template.step1section.helpers({
     materialList() {
         return materials.find({}, { fields: { _id: 1 }, sort: { _id: 1 } });
     },
-    showSVG(name) {
-        const _id = this.collectionID;
-        const collection = this.collection;
-        const query = { fields: {} };
-        query.fields[`${name}.perfil`] = 1;
-        const column = collection.findOne({ _id }, query);
-        return typeof column === 'object'
-            && typeof column[name] === 'object'
-            && typeof column[name].perfil === 'string';
-    },
-    isSelected(collection, _id, field, subfield, perfilName) {
-        const query = { fields: {} };
-        query.fields[`${field}.${subfield}`] = 1;
-        const column = collection.findOne({ _id }, query);
-        const test1 = typeof column === 'object'
-            && typeof column[field] === 'object'
-            && column[field][subfield] === perfilName;
-        return test1 || (!test1 && typeof perfilName === 'undefined');
-    },
-    perfilBean(name) {
-        const _id = this.collectionID;
-        const collection = this.collection;
-        const query = { fields: {} };
-        query.fields[`${name}.perfil`] = 1;
-        const column = collection.findOne({ _id }, query);
-        const perfilObj = new PerfilClass(column[name].perfil);
-        return perfilObj.getSVG();
+    isSelected(selected, value) {
+        return selected === value;
     }
 });
 

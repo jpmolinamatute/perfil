@@ -6,12 +6,107 @@ div#layout-body {
     height: 100%;
 }
 
-select#perfil-list {
-    width: 150px;
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+  
+  /* Hide default HTML checkbox */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+div.perfil-row{
+    width: 100%;
+    height: 99px;
+    display: flex;
+    flex-direction: row;
+    margin-top: 15px;
+}
+
+div#perfil-list-wrapper,
+div#material-list-wrapper {
+    width: 160px;
+    margin-right: 15px;
+    order: 1;
+}
+
+div.perfil-row > table{
+    order: 2;
+}
+
+div#language-wrapper{
+    width: 50px;
+}
+
+div#language-wrapper > label {
+    margin-top: 8px;
 }
 
 table .centered {
     text-align: center;
+}
+
+
+div#both-info > ul{
+    list-style: none;
+    padding-left: 5px;
+}
+
+div#both-info .tag{
+    font-weight: bolder;
 }
 
 div#wizard {
@@ -110,7 +205,7 @@ div#step3 {
 
 div#step1-column {
     order: 1;
-    flex-grow: 1;
+    flex: 1 1 33.33%;
 }
 
 div#step1-column div.form-group {
@@ -120,7 +215,20 @@ div#step1-column div.form-group {
 
 div#step1-left-beam {
     order: 2;
-    flex-grow: 1;
+    flex: 1 1 33.33%;
+}
+
+div#step1-left-beam ul,
+div#step1-right-beam ul {
+    width: 175px;
+    display: inline-block;
+    list-style: none;
+    padding-left: 0;
+}
+
+div#step1-left-beam svg,
+div#step1-right-beam svg {
+    vertical-align: top;
 }
 
 div#step1-left-beam div.form-group {
@@ -130,7 +238,7 @@ div#step1-left-beam div.form-group {
 
 div#step1-right-beam {
     order: 3;
-    flex-grow: 1;
+    flex: 1 1 33.33%;
 }
 
 div#step1-right-beam div.form-group {
@@ -138,7 +246,7 @@ div#step1-right-beam div.form-group {
     width: 49%;
 }
 
-div#step1 svg {
+div#step1-column svg {
     display: block;
     /* margin-bottom: 15px; */
     margin: 0 auto 15px;

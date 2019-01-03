@@ -1,9 +1,21 @@
 <template name="step1">
     <div id="step1">
-        {{#each beans}}
-            <div id="{{elementID}}">
+        <div id="step1-column">
+            {{#with column}}
                 {{> step1section}}
-            </div>
-        {{/each}}
+            {{/with}}
+        </div>
+        <div id="step1-left-beam">
+            {{#with left}}
+                {{> step1section}}
+                {{> step2section}}
+            {{/with}}
+        </div>
+        <div id="step1-right-beam">
+            {{#with right}}
+                {{> step1section}}
+                {{> step2section}}
+            {{/with}}
+        </div>
     </div>
 </template>
