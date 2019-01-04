@@ -15,16 +15,10 @@ Template.perfil.events({
     'change select#material-list': (event, templateInstance) => {
         const perfilObj = event.currentTarget.value.length > 0 ? event.currentTarget.value : false;
         templateInstance.materialSelected.set(perfilObj);
-    },
-    'change input#language-toggle': (event, templateInstance) => {
-        templateInstance.language.set(event.currentTarget.checked);
     }
 });
 
 Template.perfil.helpers({
-    language() {
-        return Template.instance().language.get();
-    },
     perfilList() {
         return perfil.find({}, { fields: { _id: 1 }, sort: { _id: 1 } });
     },
@@ -37,9 +31,7 @@ Template.perfil.helpers({
     materialSelected() {
         return Template.instance().materialSelected.get();
     },
-    bothSelected() {
-        return Template.instance().perfilSelected.get() && Template.instance().materialSelected.get();
-    },
+
     isPerfilSelected(current) {
         return Template.instance().perfilSelected.get() === current;
     },
@@ -74,103 +66,107 @@ Template.perfil.helpers({
         });
     },
     section() {
-        const section = {};
-        const materialInstance = Template.instance().materialSelected.get();
-        const material = materials.findOne({ _id: materialInstance }, {
-            fields: {
-                Fu: 1,
-                Fy: 1,
-                E: 1
-            },
-            reactive: false
-        });
-        const perfilInstance = Template.instance().perfilSelected.get();
-        const singlePerfil = perfil.findOne({ _id: perfilInstance }, {
-            fields: {
-                _id: 0,
-                d: 1,
-                bf: 1,
-                tw: 1,
-                tf: 1,
-                r: 1,
-                Area: 1,
-                Peso: 1
-            },
-            reactive: false
-        });
-        const eala = (singlePerfil.bf / 2) / singlePerfil.tf;
-        const ealma = (singlePerfil.d - (2 * (singlePerfil.tf + singlePerfil.r))) / singlePerfil.tw;
-        const V = Math.sqrt(material.E / material.Fy);
-        const lealacomp = 0.56 * V;
-        const lealmacomp = 1.49 * V;
-        const lealaflexcn = 0.38 * V;
-        const lealmaflexcn = 3.76 * V;
-        const lealmaflexne = 5.70 * V;
-        const slender = 'Slender element';
-        const nonslender = 'Nonslender element';
-        const compact = 'Compact element';
-        const noncompact = 'Noncompact element';
+        let section = false;
+        const both = Template.instance().perfilSelected.get() && Template.instance().materialSelected.get();
+        if (both) {
+            section = {};
+            const materialInstance = Template.instance().materialSelected.get();
+            const material = materials.findOne({ _id: materialInstance }, {
+                fields: {
+                    Fu: 1,
+                    Fy: 1,
+                    E: 1
+                },
+                reactive: false
+            });
+            const perfilInstance = Template.instance().perfilSelected.get();
+            const singlePerfil = perfil.findOne({ _id: perfilInstance }, {
+                fields: {
+                    _id: 0,
+                    d: 1,
+                    bf: 1,
+                    tw: 1,
+                    tf: 1,
+                    r: 1,
+                    Area: 1,
+                    Peso: 1
+                },
+                reactive: false
+            });
+            const eala = (singlePerfil.bf / 2) / singlePerfil.tf;
+            const ealma = (singlePerfil.d - (2 * (singlePerfil.tf + singlePerfil.r))) / singlePerfil.tw;
+            const V = Math.sqrt(material.E / material.Fy);
+            const lealacomp = 0.56 * V;
+            const lealmacomp = 1.49 * V;
+            const lealaflexcn = 0.38 * V;
+            const lealmaflexcn = 3.76 * V;
+            const lealmaflexne = 5.70 * V;
+            const slender = 'Slender element';
+            const nonslender = 'Nonslender element';
+            const compact = 'Compact element';
+            const noncompact = 'Noncompact element';
 
-        if (eala <= lealacomp) {
-            section.flange1 = nonslender;
-        } else {
-            section.flange1 = slender;
-        }
+            if (eala <= lealacomp) {
+                section.flange1 = nonslender;
+            } else {
+                section.flange1 = slender;
+            }
 
-        if (ealma <= lealmacomp) {
-            section.web1 = nonslender;
-        } else {
-            section.web1 = slender;
-        }
+            if (ealma <= lealmacomp) {
+                section.web1 = nonslender;
+            } else {
+                section.web1 = slender;
+            }
 
-        if (eala <= lealacomp && ealma <= lealmacomp) {
-            section.section1 = nonslender;
-        } else {
-            section.section1 = slender;
-        }
+            if (eala <= lealacomp && ealma <= lealmacomp) {
+                section.section1 = nonslender;
+            } else {
+                section.section1 = slender;
+            }
 
-        if (eala <= lealaflexcn) {
-            section.flange2 = compact;
-        } else if (eala <= V) {
-            section.flange2 = noncompact;
-        } else {
-            section.flange2 = slender;
-        }
+            if (eala <= lealaflexcn) {
+                section.flange2 = compact;
+            } else if (eala <= V) {
+                section.flange2 = noncompact;
+            } else {
+                section.flange2 = slender;
+            }
 
-        if (ealma <= lealmaflexcn) {
-            section.web2 = compact;
-        } else if (ealma <= lealmaflexne) {
-            section.web2 = noncompact;
-        } else {
-            section.web2 = slender;
-        }
+            if (ealma <= lealmaflexcn) {
+                section.web2 = compact;
+            } else if (ealma <= lealmaflexne) {
+                section.web2 = noncompact;
+            } else {
+                section.web2 = slender;
+            }
 
 
-        if (section.flange2 === compact) {
-            if (section.web2 === compact) {
-                section.section2 = compact;
-            } else if (section.web2 === noncompact) {
-                section.section2 = noncompact;
+            if (section.flange2 === compact) {
+                if (section.web2 === compact) {
+                    section.section2 = compact;
+                } else if (section.web2 === noncompact) {
+                    section.section2 = noncompact;
+                } else {
+                    section.section2 = slender;
+                }
+            } else if (section.flange2 === noncompact) {
+                if (section.web2 === compact || section.web2 === noncompact) {
+                    section.section2 = noncompact;
+                } else {
+                    section.section2 = slender;
+                }
             } else {
                 section.section2 = slender;
             }
-        } else if (section.flange2 === noncompact) {
-            if (section.web2 === compact || section.web2 === noncompact) {
-                section.section2 = noncompact;
-            } else {
-                section.section2 = slender;
-            }
-        } else {
-            section.section2 = slender;
+
+            // console.log(section);
+
+            // console.log(`eala: ${eala}`);
+            // console.log(`ealma: ${ealma}`);
+            // console.log(`lealacomp: ${lealacomp}`);
+            // console.log(`lealmacomp: ${lealmacomp}`);
+            // console.log(`V: ${V}`);
         }
-
-        console.log(section);
-
-        console.log(`eala: ${eala}`);
-        console.log(`ealma: ${ealma}`);
-        console.log(`lealacomp: ${lealacomp}`);
-        console.log(`lealmacomp: ${lealmacomp}`);
-        console.log(`V: ${V}`);
 
         return section;
     },
@@ -196,5 +192,4 @@ Template.perfil.helpers({
 Template.perfil.onCreated(function perfilononCreated() {
     this.perfilSelected = new ReactiveVar(false);
     this.materialSelected = new ReactiveVar(false);
-    this.language = new ReactiveVar(true);
 });

@@ -1,8 +1,13 @@
 import './appbody.html';
 import './pages/perfil/perfil.js';
 import './components/wizard/wizard.js';
+import './pages/login/login';
+import { Meteor } from 'meteor/meteor';
 
 Template.appbody.helpers({
+    language() {
+        return Template.instance().language.get();
+    },
     name() {
         return location.pathname === '/' ? 'perfil' : 'wizard';
     },
@@ -59,12 +64,34 @@ Template.appbody.helpers({
                 console.log('cancel');
             }
         };
+    },
+    pictureURL() {
+        const user = Meteor.user();
+        let picture = false;
+        if (typeof user === 'object' && typeof user.services === 'object') {
+            picture = user.services.google.picture;
+        }
+        return picture;
     }
 });
 
+Template.appbody.events({
+    'change input#language-toggle': (event, templateInstance) => {
+        templateInstance.language.set(event.currentTarget.checked);
+    },
+    'click button#logout': (event) => {
+        Meteor.logout();
+        event.stopPropagation();
+    }
+});
 
-Template.appbody.onCreated(function step1onCreated() {
+Template.appbody.onCreated(function appbodyonCreated() {
+    this.language = new ReactiveVar(true);
     this.subscribe('perfil');
     this.subscribe('materials');
     this.subscribe('units');
+    this.autorun(() => {
+        Meteor.userId();
+        this.subscribe('pictures');
+    });
 });

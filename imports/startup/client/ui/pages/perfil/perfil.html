@@ -1,124 +1,118 @@
 <template name="perfil">
-    <div id="language-wrapper">
-        {{#if language}}
-            <span>Español</span>
-        {{else}}
-            <span>English</span>
-        {{/if}}
-        <label for="language-toggle" class="switch">
-            <input id="language-toggle" type="checkbox" checked="{{language}}">
-            <span class="slider round"></span>
-        </label>
-    </div>
 
-    <div class="perfil-row">
-        <div id="perfil-list-wrapper" class="form-group">
-            <label for="perfil-list">Perfil</label>
-            <select class="form-control" id="perfil-list">
-                <option value="" selected="{{isPerfilSelected false}}">&#45;&#45; Select One &#45;&#45;</option>
-                {{#each perfilList}}
-                    <option value="{{_id}}" selected="{{isPerfilSelected _id}}">{{_id}}</option>
-                {{/each}}
-            </select>
-        </div>
-        {{#if perfilSelected}}
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Overall depth of member<br>d</th>
-                        <th scope="col">Flange width<br>b<sub>f</sub></th>
-                        <th scope="col">Web thickness<br>t<sub>w</sub></th>
-                        <th scope="col">Flange thickness<br>t<sub>f</sub></th>
-                        <th scope="col">Fillet radius<br>r</th>
-                        <th scope="col">Cross-sectional area<br>Area</th>
-                        <th scope="col">Weight</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        {{#with perfilRow}}
-                            <td>{{d}}{{{getunit 'd'}}}</td>
-                            <td>{{bf}}{{{getunit 'bf'}}}</td>
-                            <td>{{tw}}{{{getunit 'tw'}}}</td>
-                            <td>{{tf}}{{{getunit 'tf'}}}</td>
-                            <td>{{r}}{{{getunit 'r'}}}</td>
-                            <td>{{Area}}{{{getunit 'Area'}}}</td>
-                            <td>{{Peso}}{{{getunit 'Peso'}}}</td>
-                        {{/with}}
-                    </tr>
-                </tbody>
-            </table>
-        {{/if}}
-    </div>
-    <div class="perfil-row">
-        <div id="material-list-wrapper" class="form-group">
-            <label for="material-list">Material</label>
-            <select class="form-control" id="material-list">
-                <option value="" selected="{{isMaterialSelected false}}">&#45;&#45; Select One &#45;&#45;</option>
-                {{#each materialList}}
-                    <option value="{{_id}}" selected="{{isMaterialSelected _id}}">{{_id}}</option>
-                {{/each}}
-            </select>
-        </div>
-        {{#if materialSelected}}
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">F<sub>y</sub></th>
-                        <th scope="col">F<sub>u</sub></th>
-                        <th scope="col">E</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        {{#with materialRow}}
-                            <td>{{Fy}}</td>
-                            <td>{{Fu}}</td>
-                            <td>{{E}}</td>
-                        {{/with}}
-                    </tr>
-                </tbody>
-            </table>
-        {{/if}}
-    </div>
-    {{#if bothSelected}}
+
+    <table id="perfil-list-wrapper" class="table">
+        <thead>
+            <tr>
+                <th>Perfil</th>
+                {{#if perfilSelected}}
+                    <th scope="col">Overall depth of member<br>d</th>
+                    <th scope="col">Flange width<br>b<sub>f</sub></th>
+                    <th scope="col">Web thickness<br>t<sub>w</sub></th>
+                    <th scope="col">Flange thickness<br>t<sub>f</sub></th>
+                    <th scope="col">Fillet radius<br>r</th>
+                    <th scope="col">Cross-sectional area<br>Area</th>
+                    <th scope="col">Weight</th>
+                {{else}}
+                    <th colspan="7">&#32;</th>
+                {{/if}}
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <select class="form-control" id="perfil-list">
+                        <option value="" selected="{{isPerfilSelected false}}">&#45;&#45; Select One &#45;&#45;</option>
+                        {{#each perfilList}}
+                            <option value="{{_id}}" selected="{{isPerfilSelected _id}}">{{_id}}</option>
+                        {{/each}}
+                    </select>
+                </td>
+                {{#with perfilRow}}
+                    <td>{{d}}{{{getunit 'd'}}}</td>
+                    <td>{{bf}}{{{getunit 'bf'}}}</td>
+                    <td>{{tw}}{{{getunit 'tw'}}}</td>
+                    <td>{{tf}}{{{getunit 'tf'}}}</td>
+                    <td>{{r}}{{{getunit 'r'}}}</td>
+                    <td>{{Area}}{{{getunit 'Area'}}}</td>
+                    <td>{{Peso}}{{{getunit 'Peso'}}}</td>
+                    {{else}}
+                        <td colspan="7">&#32;</td>
+                {{/with}}
+            </tr>
+        </tbody>
+    </table>
+
+    <table id="material-list-wrapper" class="table">
+        <thead>
+            <tr>
+                <th scope="col">Material</th>
+                {{#if materialSelected}}
+                    <th scope="col">F<sub>y</sub></th>
+                    <th scope="col">F<sub>u</sub></th>
+                    <th scope="col">E</th>
+                {{else}}
+                    <th colspan="3">&#32;</th>
+                {{/if}}
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <select class="form-control" id="material-list">
+                        <option value="" selected="{{isMaterialSelected false}}">&#45;&#45; Select One &#45;&#45;</option>
+                        {{#each materialList}}
+                            <option value="{{_id}}" selected="{{isMaterialSelected _id}}">{{_id}}</option>
+                        {{/each}}
+                    </select>
+                </td>
+                {{#with materialRow}}
+                    <td>{{Fy}}</td>
+                    <td>{{Fu}}</td>
+                    <td>{{E}}</td>
+                    {{else}}
+                        <td colspan="3">&#32;</td>
+                {{/with}}
+            </tr>
+        </tbody>
+    </table>
+
+    {{#with section}}
         <div id="both-info">
             <h3>Classification of sections for local buckling</h3>
-            <p>width to thickness ratio: compresion &#45;&#62; elements</p>
-            <p>Members subject to axial compresion:</p>
-            {{#with section}}
-                <ul>
-                    <li>
-                        <span class="tag">Flanges: </span>
-                        <span>{{flange1}}</span>
-                    </li>
-                    <li>
-                        <span class="tag">Web: </span>
-                        <span>{{web1}}</span>
-                    </li>
-                    <li>
-                        <span class="tag">Section: </span>
-                        <span>{{section1}}</span>
-                    </li>
-                </ul>
-                <p>Width to thickness ratio</p>
-                <ul>
-                    <li>
-                        <span class="tag">Flanges: </span>
-                        <span>{{flange2}}</span>
-                    </li>
-                    <li>
-                        <span class="tag">Web: </span>
-                        <span>{{web2}}</span>
-                    </li>
-                    <li>
-                        <span class="tag">Section: </span>
-                        <span>{{section2}}</span>
-                    </li>
-                </ul>
-            {{/with}}
+            <p>Width to thickness ratios: Compression elements, members subject to axial compression.</p>
+            <ul>
+                <li>
+                    <span class="tag">Flanges: </span>
+                    <span>{{flange1}}</span>
+                </li>
+                <li>
+                    <span class="tag">Web: </span>
+                    <span>{{web1}}</span>
+                </li>
+                <li>
+                    <span class="tag">Section: </span>
+                    <span>{{section1}}</span>
+                </li>
+            </ul>
+            <p>Width to thickness ratios: Compression elements, members subject to flexure.</p>
+            <ul>
+                <li>
+                    <span class="tag">Flanges: </span>
+                    <span>{{flange2}}</span>
+                </li>
+                <li>
+                    <span class="tag">Web: </span>
+                    <span>{{web2}}</span>
+                </li>
+                <li>
+                    <span class="tag">Section: </span>
+                    <span>{{section2}}</span>
+                </li>
+            </ul>
         </div>
-    {{/if}}
+    {{/with}}
+
     {{#if perfilSelected}}
         <a id="perfil-download" class="btn btn-primary" href="{{perfilFile}}" download="{{fileName}}">Download</a>
     {{/if}}
