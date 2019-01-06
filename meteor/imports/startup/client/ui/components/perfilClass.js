@@ -50,7 +50,6 @@ export default class PerfilClass {
         this.area = perfilInstance.area;
         this.weight = perfilInstance.weight;
         this.setZ('standard');
-        this.z = this.tf + this.r;
     }
 
     getValue(label) {

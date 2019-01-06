@@ -9,14 +9,14 @@ import PerfilClass from '../../components/perfilClass';
 
 Template.perfil.events({
     'change select#perfil-list': (event, templateInstance) => {
-        const perfilObj = event.currentTarget.value.length > 0 ? event.currentTarget.value : false;
-        const obj = typeof perfilObj === 'string' ? new PerfilClass(perfilObj) : false;
-        templateInstance.perfilSelected.set(perfilObj);
+        const perfilName = event.currentTarget.value.length > 0 ? event.currentTarget.value : false;
+        const obj = typeof perfilName === 'string' ? new PerfilClass(perfilName) : false;
+        templateInstance.perfilSelected.set(perfilName);
         templateInstance.perfilClass.set(obj);
     },
     'change select#material-list': (event, templateInstance) => {
-        const perfilObj = event.currentTarget.value.length > 0 ? event.currentTarget.value : false;
-        templateInstance.materialSelected.set(perfilObj);
+        const materialName = event.currentTarget.value.length > 0 ? event.currentTarget.value : false;
+        templateInstance.materialSelected.set(materialName);
     }
 });
 

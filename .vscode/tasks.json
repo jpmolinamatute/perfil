@@ -25,6 +25,46 @@
             "problemMatcher": [
                 "$tsc"
             ]
+        },
+        {
+            "label": "Start Angular",
+            "type": "shell",
+            "command": "ng",
+            "args": [
+                "serve",
+                "--port=3004",
+                "--host=naruto.com"
+            ],
+            "options": {
+                "cwd": "${workspaceRoot}/angular"
+            },
+            "presentation": {
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": [
+                "$tsc"
+            ]
+        },
+        {
+            "label": "Start Server",
+            "type": "process",
+            "command": "/usr/bin/node",
+            "args": [
+                "./node_modules/nodemon/bin/nodemon.js",
+                "./app.js"
+            ],
+            "options": {
+                "cwd": "${workspaceRoot}/backend"
+            },
+            "presentation": {
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": [
+                "$eslint-compact",
+                "$eslint-stylish"
+            ]
         }
     ]
 }

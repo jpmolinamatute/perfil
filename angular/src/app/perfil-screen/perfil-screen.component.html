@@ -1,0 +1,53 @@
+<ng-template #headers>
+    <th scope="col">Overall depth of member<br>d</th>
+    <th scope="col">Flange width<br>b<sub>f</sub></th>
+    <th scope="col">Web thickness<br>t<sub>w</sub></th>
+    <th scope="col">Flange thickness<br>t<sub>f</sub></th>
+    <th scope="col">Fillet radius<br>r</th>
+    <th scope="col">Cross-sectional area<br>Area</th>
+    <th scope="col">Weight</th>
+    <th>&#32;</th>
+</ng-template>
+
+<ng-template #emptyHeader>
+    <th colspan="8">&#32;</th>
+</ng-template>
+
+<ng-template #emptyRow>
+    <td colspan="8">&#32;</td>
+</ng-template>
+
+<ng-template #row>
+    <td>{{perfilRow.d}}</td>
+    <td>{{perfilRow.bf}}</td>
+    <td>{{perfilRow.tw}}</td>
+    <td>{{perfilRow.tf}}</td>
+    <td>{{perfilRow.r}}</td>
+    <td>{{perfilRow.area}}</td>
+    <td>{{perfilRow.weight}}</td>
+    <td>
+        <a id="perfil-download" class="btn btn-primary" href="{{perfilFile}}" download="{{fileName}}">Download</a>
+    </td>
+</ng-template>
+
+<table id="perfil-list-wrapper" class="table">
+    <thead>
+        <tr>
+            <th>Perfil</th>
+            <ng-container *ngIf="perfilSelected; then headers; else emptyHeader"> </ng-container>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <select class="form-control" id="perfil-list">
+                    <option value="">&#45;&#45; Select One &#45;&#45;</option>
+                    <option *ngFor="let perfilName of perfilList" value="{{perfilName}}">
+                        {{perfilName}}
+                    </option>
+                </select>
+            </td>
+            <ng-container *ngIf="perfilSelected; then row; else emptyRow"> </ng-container>
+        </tr>
+    </tbody>
+</table>
