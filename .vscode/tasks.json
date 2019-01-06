@@ -1,0 +1,30 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Start Meteor",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceRoot}/meteor",
+                "env": {
+                    "MONGO_URL": "mongodb://meteor:dev@naruto:57017/connections",
+                    "ROOT_URL": "http://naruto.com:3004"
+                }
+            },
+            "command": "meteor",
+            "args": [
+                "run",
+                "--port=3004"
+            ],
+            "presentation": {
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": [
+                "$tsc"
+            ]
+        }
+    ]
+}

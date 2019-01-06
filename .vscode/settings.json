@@ -1,0 +1,10 @@
+{
+    "eslint.nodePath": "/home/juanpa/Projects/perfil/meteor/node_modules",
+    "eslint.workingDirectories": [
+        "/home/juanpa/Projects/perfil/meteor"
+    ],
+    "eslint.alwaysShowStatus": true,
+    "eslint.options": {
+        "configFile": "/home/juanpa/Projects/perfil/meteor/package.json"
+    },
+}
