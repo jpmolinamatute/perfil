@@ -10,7 +10,9 @@ import PerfilClass from '../../components/perfilClass';
 Template.perfil.events({
     'change select#perfil-list': (event, templateInstance) => {
         const perfilObj = event.currentTarget.value.length > 0 ? event.currentTarget.value : false;
+        const obj = typeof perfilObj === 'string' ? new PerfilClass(perfilObj) : false;
         templateInstance.perfilSelected.set(perfilObj);
+        templateInstance.perfilClass.set(obj);
     },
     'change select#material-list': (event, templateInstance) => {
         const perfilObj = event.currentTarget.value.length > 0 ? event.currentTarget.value : false;
@@ -39,20 +41,8 @@ Template.perfil.helpers({
         return Template.instance().materialSelected.get() === current;
     },
     perfilRow() {
-        const perfilInstance = Template.instance().perfilSelected.get();
-        return perfil.findOne({ _id: perfilInstance }, {
-            fields: {
-                _id: 0,
-                d: 1,
-                bf: 1,
-                tw: 1,
-                tf: 1,
-                r: 1,
-                Area: 1,
-                Peso: 1
-            },
-            reactive: false
-        });
+        const perfilClass = Template.instance().perfilClass.get();
+        return perfilClass instanceof PerfilClass ? perfilClass.getData() : false;
     },
     materialRow() {
         const perfilInstance = Template.instance().materialSelected.get();
@@ -83,18 +73,18 @@ Template.perfil.helpers({
             const singlePerfil = perfil.findOne({ _id: perfilInstance }, {
                 fields: {
                     _id: 0,
-                    d: 1,
-                    bf: 1,
-                    tw: 1,
-                    tf: 1,
-                    r: 1,
-                    Area: 1,
-                    Peso: 1
+                    'd.standard': 1,
+                    'bf.standard': 1,
+                    'tw.standard': 1,
+                    'tf.standard': 1,
+                    'r.standard': 1,
+                    'area.standard': 1,
+                    'weight.standard': 1
                 },
                 reactive: false
             });
-            const eala = (singlePerfil.bf / 2) / singlePerfil.tf;
-            const ealma = (singlePerfil.d - (2 * (singlePerfil.tf + singlePerfil.r))) / singlePerfil.tw;
+            const eala = (singlePerfil.bf.standard / 2) / singlePerfil.tf.standard;
+            const ealma = (singlePerfil.d.standard - (2 * (singlePerfil.tf.standard + singlePerfil.r.standard))) / singlePerfil.tw.standard;
             const V = Math.sqrt(material.E / material.Fy);
             const lealacomp = 0.56 * V;
             const lealmacomp = 1.49 * V;
@@ -159,13 +149,11 @@ Template.perfil.helpers({
                 section.section2 = slender;
             }
 
-            // console.log(section);
-
-            // console.log(`eala: ${eala}`);
-            // console.log(`ealma: ${ealma}`);
-            // console.log(`lealacomp: ${lealacomp}`);
-            // console.log(`lealmacomp: ${lealmacomp}`);
-            // console.log(`V: ${V}`);
+            console.log(`eala: ${eala} bf: ${singlePerfil.bf.standard} tf: ${singlePerfil.tf.standard}`);
+            console.log(`ealma: ${ealma}`);
+            console.log(`lealacomp: ${lealacomp}`);
+            console.log(`lealmacomp: ${lealmacomp}`);
+            console.log(`V: ${V}`);
         }
 
         return section;
@@ -175,11 +163,10 @@ Template.perfil.helpers({
         return unitObj.unit;
     },
     perfilFile() {
-        const perfilInstance = Template.instance().perfilSelected.get();
         let obj = false;
-        if (typeof perfilInstance === 'string') {
-            obj = new PerfilClass(perfilInstance);
-            obj = obj.getBlob();
+        const perfilClass = Template.instance().perfilClass.get();
+        if (perfilClass instanceof PerfilClass) {
+            obj = perfilClass.getBlob();
         }
         return obj;
     },
@@ -192,4 +179,11 @@ Template.perfil.helpers({
 Template.perfil.onCreated(function perfilononCreated() {
     this.perfilSelected = new ReactiveVar(false);
     this.materialSelected = new ReactiveVar(false);
+    this.perfilClass = new ReactiveVar(false, (old, newer) => {
+        let equal = false;
+        if (old instanceof PerfilClass && newer instanceof PerfilClass) {
+            equal = old.name === newer.name;
+        }
+        return equal;
+    });
 });

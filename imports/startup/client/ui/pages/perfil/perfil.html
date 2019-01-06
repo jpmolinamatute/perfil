@@ -13,8 +13,9 @@
                     <th scope="col">Fillet radius<br>r</th>
                     <th scope="col">Cross-sectional area<br>Area</th>
                     <th scope="col">Weight</th>
+                    <th>&#32;</th>
                 {{else}}
-                    <th colspan="7">&#32;</th>
+                    <th colspan="8">&#32;</th>
                 {{/if}}
             </tr>
         </thead>
@@ -34,10 +35,13 @@
                     <td>{{tw}}{{{getunit 'tw'}}}</td>
                     <td>{{tf}}{{{getunit 'tf'}}}</td>
                     <td>{{r}}{{{getunit 'r'}}}</td>
-                    <td>{{Area}}{{{getunit 'Area'}}}</td>
-                    <td>{{Peso}}{{{getunit 'Peso'}}}</td>
+                    <td>{{area}}{{{getunit 'Area'}}}</td>
+                    <td>{{weight}}{{{getunit 'Peso'}}}</td>
+                    <td>
+                        <a id="perfil-download" class="btn btn-primary" href="{{perfilFile}}" download="{{fileName}}">Download</a>
+                    </td>
                     {{else}}
-                        <td colspan="7">&#32;</td>
+                        <td colspan="8">&#32;</td>
                 {{/with}}
             </tr>
         </tbody>
@@ -112,8 +116,4 @@
             </ul>
         </div>
     {{/with}}
-
-    {{#if perfilSelected}}
-        <a id="perfil-download" class="btn btn-primary" href="{{perfilFile}}" download="{{fileName}}">Download</a>
-    {{/if}}
 </template>

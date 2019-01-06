@@ -1,29 +1,45 @@
 import { check, Match } from 'meteor/check';
 import { perfil } from '../../../both/collections.js';
 
+
 export default class PerfilClass {
+    outputType = null;
+
+    z = null;
+
     constructor(name) {
         check(name, String);
         const perfilInstance = perfil.findOne({ _id: name }, { reactive: false });
         check(perfilInstance, {
             _id: String,
-            d: Match.OneOf(Number, null),
-            bf: Match.OneOf(Number, null),
-            tw: Match.OneOf(Number, null),
-            tf: Match.OneOf(Number, null),
-            r: Match.OneOf(Number, null),
-            K: Match.OneOf(Number, null),
-            Area: Match.OneOf(Number, null),
-            Peso: Match.OneOf(Number, null),
-            Ix: Match.OneOf(Number, null),
-            Sx: Match.OneOf(Number, null),
-            rx: Match.OneOf(Number, null),
-            Iy: Match.OneOf(Number, null),
-            Sy: Match.OneOf(Number, null),
-            ry: Match.OneOf(Number, null),
-            Zx: Match.OneOf(Number, null),
-            Zy: Match.OneOf(Number, null),
-            h: Match.OneOf(Number, null)
+            d: {
+                standard: Number,
+                american: Match.Maybe(Number)
+            },
+            bf: {
+                standard: Number,
+                american: Match.Maybe(Number)
+            },
+            tw: {
+                standard: Number,
+                american: Match.Maybe(Number)
+            },
+            tf: {
+                standard: Number,
+                american: Match.Maybe(Number)
+            },
+            r: {
+                standard: Number,
+                american: Match.Maybe(Number)
+            },
+            area: {
+                standard: Number,
+                american: Match.Maybe(Number)
+            },
+            weight: {
+                standard: Number,
+                american: Match.Maybe(Number)
+            }
         });
         this.name = perfilInstance._id;
         this.d = perfilInstance.d;
@@ -31,19 +47,46 @@ export default class PerfilClass {
         this.tw = perfilInstance.tw;
         this.tf = perfilInstance.tf;
         this.r = perfilInstance.r;
-        this.K = perfilInstance.K;
-        this.Area = perfilInstance.Area;
-        this.Peso = perfilInstance.Peso;
-        this.Ix = perfilInstance.Ix;
-        this.Sx = perfilInstance.Sx;
-        this.rx = perfilInstance.rx;
-        this.Iy = perfilInstance.Iy;
-        this.Sy = perfilInstance.Sy;
-        this.ry = perfilInstance.ry;
-        this.Zx = perfilInstance.Zx;
-        this.Zy = perfilInstance.Zy;
-        this.h = perfilInstance.h;
+        this.area = perfilInstance.area;
+        this.weight = perfilInstance.weight;
+        this.setZ('standard');
         this.z = this.tf + this.r;
+    }
+
+    getValue(label) {
+        let result = null;
+        const obj = this[label];
+
+        if (typeof obj[this.outputType] === 'number') {
+            result = obj[this.outputType];
+        } else if (this.outputType === 'fraction') {
+            console.log('code me');
+        } else {
+            console.error(`${label} with outpuType: ${this.outputType} doesn't exists`);
+        }
+        return result;
+    }
+
+    setZ(outputType) {
+        check(outputType, Match.OneOf('standard', 'american', 'fraction'));
+        this.outputType = outputType;
+        const tf = this.getValue('tf');
+        const r = this.getValue('r');
+        this.z = tf + r;
+    }
+
+
+    getData(outputType = 'standard') {
+        this.setZ(outputType);
+        return {
+            d: this.getValue('d'),
+            bf: this.getValue('bf'),
+            tw: this.getValue('tw'),
+            tf: this.getValue('tf'),
+            r: this.getValue('r'),
+            area: this.getValue('area'),
+            weight: this.getValue('weight')
+        };
     }
 
     /* eslint-disable class-methods-use-this */
@@ -55,92 +98,122 @@ export default class PerfilClass {
 
     /* eslint-enable class-methods-use-this */
     point1() {
-        const x = this.bf;
+        const x = this.getValue('bf');
         const y = 0;
         return { x, y };
     }
 
     point2() {
-        const x = this.bf;
-        const y = this.tf;
+        const x = this.getValue('bf');
+        const y = this.getValue('tf');
         return { x, y };
     }
 
     point3() {
-        const x = (this.bf / 2) + (this.tw / 2) + this.r;
-        const y = this.tf;
+        const bf = this.getValue('bf');
+        const tw = this.getValue('tw');
+        const r = this.getValue('r');
+        const x = (bf / 2) + (tw / 2) + r;
+        const y = this.getValue('tf');
         return { x, y };
     }
 
     point4() {
-        const x = (this.bf / 2) + (this.tw / 2);
+        const bf = this.getValue('bf');
+        const tw = this.getValue('tw');
+        const x = (bf / 2) + (tw / 2);
         const y = this.z;
         return { x, y };
     }
 
     point5() {
-        const x = (this.bf / 2) + (this.tw / 2);
-        const y = this.d - this.z;
+        const bf = this.getValue('bf');
+        const tw = this.getValue('tw');
+        const d = this.getValue('d');
+        const x = (bf / 2) + (tw / 2);
+        const y = d - this.z;
         return { x, y };
     }
 
     point6() {
-        const x = (this.bf / 2) + (this.tw / 2) + this.r;
-        const y = this.d - this.tf;
+        const bf = this.getValue('bf');
+        const tf = this.getValue('tf');
+        const tw = this.getValue('tw');
+        const d = this.getValue('d');
+        const r = this.getValue('r');
+        const x = (bf / 2) + (tw / 2) + r;
+        const y = d - tf;
         return { x, y };
     }
 
     point7() {
-        const x = this.bf;
-        const y = this.d - this.tf;
+        const tf = this.getValue('tf');
+        const d = this.getValue('d');
+        const x = this.getValue('bf');
+        const y = d - tf;
         return { x, y };
     }
 
     point8() {
-        const x = this.bf;
-        const y = this.d;
+        const x = this.getValue('bf');
+        const y = this.getValue('d');
         return { x, y };
     }
 
     point9() {
         const x = 0;
-        const y = this.d;
+        const y = this.getValue('d');
         return { x, y };
     }
 
     point10() {
+        const d = this.getValue('d');
+        const tf = this.getValue('tf');
         const x = 0;
-        const y = this.d - this.tf;
+        const y = d - tf;
         return { x, y };
     }
 
     point11() {
-        const x = (this.bf / 2) - (this.tw / 2) - this.r;
-        const y = this.d - this.tf;
+        const bf = this.getValue('bf');
+        const tf = this.getValue('tf');
+        const tw = this.getValue('tw');
+        const d = this.getValue('d');
+        const r = this.getValue('r');
+        const x = (bf / 2) - (tw / 2) - r;
+        const y = d - tf;
         return { x, y };
     }
 
     point12() {
-        const x = (this.bf / 2) - (this.tw / 2);
-        const y = this.d - this.z;
+        const bf = this.getValue('bf');
+        const tw = this.getValue('tw');
+        const d = this.getValue('d');
+        const x = (bf / 2) - (tw / 2);
+        const y = d - this.z;
         return { x, y };
     }
 
     point13() {
-        const x = (this.bf / 2) - (this.tw / 2);
+        const bf = this.getValue('bf');
+        const tw = this.getValue('tw');
+        const x = (bf / 2) - (tw / 2);
         const y = this.z;
         return { x, y };
     }
 
     point14() {
-        const x = (this.bf / 2) - (this.tw / 2) - this.r;
-        const y = this.tf;
+        const bf = this.getValue('bf');
+        const tw = this.getValue('tw');
+        const r = this.getValue('r');
+        const x = (bf / 2) - (tw / 2) - r;
+        const y = this.getValue('tf');
         return { x, y };
     }
 
     point15() {
         const x = 0;
-        const y = this.tf;
+        const y = this.getValue('tf');
         return { x, y };
     }
 
@@ -158,7 +231,8 @@ export default class PerfilClass {
     //     return this[`point${point}`]()[axis];
     // }
 
-    getFileContent() {
+    getFileContent(outputType = 'standard') {
+        this.setZ(outputType);
         const point1 = this.point1();
         const point2 = this.point2();
         const point3 = this.point3();
@@ -174,6 +248,9 @@ export default class PerfilClass {
         const point13 = this.point13();
         const point14 = this.point14();
         const point15 = this.point15();
+        const bf = this.getValue('bf');
+        const r = this.getValue('r');
+        const d = this.getValue('d');
         /* eslint-disable max-len */
         return `GRIDMODE 0
 SNAPMODE 0
@@ -185,8 +262,8 @@ line ${point14.x},${point14.y} ${point15.x},${point15.y} 0,0 ${point1.x},${point
 line ${point13.x},${point13.y} ${point12.x},${point12.y} 
 line ${point4.x},${point4.y} ${point5.x},${point5.y} 
 line ${point6.x},${point6.y} ${point7.x},${point7.y} ${point8.x},${point8.y} ${point9.x},${point9.y} ${point10.x},${point10.y} ${point11.x},${point11.y} 
-zoom w -10,-10 ${this.bf + 10},${this.d + 10}
-fillet R ${this.r}  ${point3.x},${point3.y}  ${point4.x},${point4.y}  ${point5.x},${point5.y}  ${point6.x},${point6.y}  ${point11.x},${point11.y}  ${point12.x},${point12.y}  ${point13.x},${point13.y}  ${point14.x},${point14.y}
+zoom w -10,-10 ${bf + 10},${d + 10}
+fillet R ${r}  ${point3.x},${point3.y}  ${point4.x},${point4.y}  ${point5.x},${point5.y}  ${point6.x},${point6.y}  ${point11.x},${point11.y}  ${point12.x},${point12.y}  ${point13.x},${point13.y}  ${point14.x},${point14.y}
 zoom 0.9x `;
         /* eslint-enable max-len */
     }
@@ -201,10 +278,11 @@ zoom 0.9x `;
     }
 
 
-    getSVG() {
+    getSVG(outputType = 'standard') {
+        this.setZ(outputType);
         return {
-            width: this.bf,
-            heigth: this.d,
+            width: this.getValue('bf'),
+            heigth: this.getValue('d'),
             x0: this.point0().x,
             y0: this.point0().y,
             x1: this.point1().x,
