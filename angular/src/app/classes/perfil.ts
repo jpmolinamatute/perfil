@@ -1,55 +1,89 @@
 import { UnitType, Metric, MetricLabel, PerfilData, Coordinate, PerfilSVG } from './generics';
-import { PerfilService } from '../perfil.service';
-
+import { PerfilService } from '../services/perfil.service';
+import { ServiceStatus } from './serviceStatus';
 
 export class Perfil {
     private outputType: UnitType;
-    private d: Metric;
-    private bf: Metric;
-    private tw: Metric;
-    private tf: Metric;
-    private r: Metric;
-    private area: Metric;
-    private weight: Metric;
     private z: number;
+    // private d: Metric;
+    // private bf: Metric;
+    // private tw: Metric;
+    // private tf: Metric;
+    // private r: Metric;
+    // private area: Metric;
+    // private weight: Metric;
+    // constructor(public _id: string, private service: PerfilService) {
+    //     const listSubscriber = this.service.init();
+    //     listSubscriber.subscribe((status: ServiceStatus) => {
+    //         if (status.status === 'ready') {
 
-    constructor(public _id: string) {
+    //             const data = this.service.getPerfil(_id);
+    //             this.d = data.d;
+    //             this.bf = data.bf;
+    //             this.tw = data.tw;
+    //             this.tf = data.tf;
+    //             this.r = data.r;
+    //             this.area = data.area;
+    //             this.weight = data.weight;
+    //         }
+    //     });
+    // }
 
-    }
+    constructor(public _id: string,
+        private d: Metric,
+        private bf: Metric,
+        private tw: Metric,
+        private tf: Metric,
+        private r: Metric,
+        private area: Metric,
+        private weight: Metric
+    ) { }
 
     getValue(label: MetricLabel): number {
         let result = null;
-        const obj = this[label];
 
-        if (typeof obj[this.outputType] === 'number') {
-            result = obj[this.outputType];
-        } else if (this.outputType === 'fraction') {
-            console.log('code me');
-        } else {
-            console.error(`${label} with outpuType: ${this.outputType} doesn't exists`);
+        if (label in this) {
+            const obj = this[label];
+            if (typeof obj[this.outputType] === 'number') {
+                result = obj[this.outputType];
+            } else if (this.outputType === 'fraction') {
+                console.log('code me');
+            } else {
+                console.error(`${label} with outpuType: ${this.outputType} doesn't exists`);
+            }
         }
         return result;
     }
 
-    setZ(outputType: UnitType): void {
+    setZ(outputType: UnitType): boolean {
+        let valid = false;
         this.outputType = outputType;
         const tf = this.getValue(MetricLabel.tf);
         const r = this.getValue(MetricLabel.r);
-        this.z = tf + r;
+
+        if (typeof tf === 'number' && typeof r === 'number') {
+            this.z = tf + r;
+            valid = true;
+        }
+        return valid;
     }
 
     getData(outputType = UnitType.standard): PerfilData {
-        this.setZ(outputType);
-        return {
-            d: this.getValue(MetricLabel.d),
-            bf: this.getValue(MetricLabel.bf),
-            tw: this.getValue(MetricLabel.tw),
-            tf: this.getValue(MetricLabel.tf),
-            r: this.getValue(MetricLabel.r),
-            area: this.getValue(MetricLabel.area),
-            weight: this.getValue(MetricLabel.weight),
-            _id: this._id
-        };
+        const valid = this.setZ(outputType);
+        let data: PerfilData;
+        if (valid) {
+            data = {
+                d: this.getValue(MetricLabel.d),
+                bf: this.getValue(MetricLabel.bf),
+                tw: this.getValue(MetricLabel.tw),
+                tf: this.getValue(MetricLabel.tf),
+                r: this.getValue(MetricLabel.r),
+                area: this.getValue(MetricLabel.area),
+                weight: this.getValue(MetricLabel.weight),
+                _id: this._id
+            };
+        }
+        return data;
     }
     point0(): Coordinate {
         const x = 0;
@@ -176,28 +210,29 @@ export class Perfil {
         return { x, y };
     }
 
-    getFileContent(outputType = UnitType.standard) {
-        this.setZ(outputType);
-        const point1 = this.point1();
-        const point2 = this.point2();
-        const point3 = this.point3();
-        const point4 = this.point4();
-        const point5 = this.point5();
-        const point6 = this.point6();
-        const point7 = this.point7();
-        const point8 = this.point8();
-        const point9 = this.point9();
-        const point10 = this.point10();
-        const point11 = this.point11();
-        const point12 = this.point12();
-        const point13 = this.point13();
-        const point14 = this.point14();
-        const point15 = this.point15();
-        const bf = this.getValue(MetricLabel.bf);
-        const r = this.getValue(MetricLabel.r);
-        const d = this.getValue(MetricLabel.d);
-        /* eslint-disable max-len */
-        return `GRIDMODE 0
+    getFileContent(outputType = UnitType.standard): string {
+        const valid = this.setZ(outputType);
+        let text: string;
+        if (valid) {
+            const point1 = this.point1();
+            const point2 = this.point2();
+            const point3 = this.point3();
+            const point4 = this.point4();
+            const point5 = this.point5();
+            const point6 = this.point6();
+            const point7 = this.point7();
+            const point8 = this.point8();
+            const point9 = this.point9();
+            const point10 = this.point10();
+            const point11 = this.point11();
+            const point12 = this.point12();
+            const point13 = this.point13();
+            const point14 = this.point14();
+            const point15 = this.point15();
+            const bf = this.getValue(MetricLabel.bf);
+            const r = this.getValue(MetricLabel.r);
+            const d = this.getValue(MetricLabel.d);
+            text = `GRIDMODE 0
 SNAPMODE 0
 ORTHO OFF
 ISODRAFT O
@@ -210,57 +245,63 @@ line ${point6.x},${point6.y} ${point7.x},${point7.y} ${point8.x},${point8.y} ${p
 zoom w -10,-10 ${bf + 10},${d + 10}
 fillet R ${r}  ${point3.x},${point3.y}  ${point4.x},${point4.y}  ${point5.x},${point5.y}  ${point6.x},${point6.y}  ${point11.x},${point11.y}  ${point12.x},${point12.y}  ${point13.x},${point13.y}  ${point14.x},${point14.y}
 zoom 0.9x `;
-        /* eslint-enable max-len */
+        }
+        return text;
     }
 
-    getBlob() {
+    getBlob(): String {
         const txt = this.getFileContent();
         const blob = new Blob([txt], {
-            type: 'text/plain'
+            type: 'text/plain',
+            endings: 'native'
         });
-        // ,
-        // endings: 'native'
+
+
         return window.URL.createObjectURL(blob);
     }
 
 
     getSVG(outputType = UnitType.standard): PerfilSVG {
-        this.setZ(outputType);
-        return {
-            width: this.getValue(MetricLabel.bf),
-            heigth: this.getValue(MetricLabel.d),
-            x0: this.point0().x,
-            y0: this.point0().y,
-            x1: this.point1().x,
-            y1: this.point1().y,
-            x2: this.point2().x,
-            y2: this.point2().y,
-            x3: this.point3().x,
-            y3: this.point3().y,
-            x4: this.point4().x,
-            y4: this.point4().y,
-            x5: this.point5().x,
-            y5: this.point5().y,
-            x6: this.point6().x,
-            y6: this.point6().y,
-            x7: this.point7().x,
-            y7: this.point7().y,
-            x8: this.point8().x,
-            y8: this.point8().y,
-            x9: this.point9().x,
-            y9: this.point9().y,
-            x10: this.point10().x,
-            y10: this.point10().y,
-            x11: this.point11().x,
-            y11: this.point11().y,
-            x12: this.point12().x,
-            y12: this.point12().y,
-            x13: this.point13().x,
-            y13: this.point13().y,
-            x14: this.point14().x,
-            y14: this.point14().y,
-            x15: this.point15().x,
-            y15: this.point15().y
-        };
+        const valid = this.setZ(outputType);
+        let svg: PerfilSVG;
+        if (valid) {
+            svg = {
+                width: this.getValue(MetricLabel.bf),
+                heigth: this.getValue(MetricLabel.d),
+                x0: this.point0().x,
+                y0: this.point0().y,
+                x1: this.point1().x,
+                y1: this.point1().y,
+                x2: this.point2().x,
+                y2: this.point2().y,
+                x3: this.point3().x,
+                y3: this.point3().y,
+                x4: this.point4().x,
+                y4: this.point4().y,
+                x5: this.point5().x,
+                y5: this.point5().y,
+                x6: this.point6().x,
+                y6: this.point6().y,
+                x7: this.point7().x,
+                y7: this.point7().y,
+                x8: this.point8().x,
+                y8: this.point8().y,
+                x9: this.point9().x,
+                y9: this.point9().y,
+                x10: this.point10().x,
+                y10: this.point10().y,
+                x11: this.point11().x,
+                y11: this.point11().y,
+                x12: this.point12().x,
+                y12: this.point12().y,
+                x13: this.point13().x,
+                y13: this.point13().y,
+                x14: this.point14().x,
+                y14: this.point14().y,
+                x15: this.point15().x,
+                y15: this.point15().y
+            };
+        }
+        return svg;
     }
 }

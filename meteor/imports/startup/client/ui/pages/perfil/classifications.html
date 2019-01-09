@@ -1,0 +1,50 @@
+<template name="classifications">
+    <div id="both-info">
+        <h3>Classification of sections for local buckling</h3>
+        <p>Width to thickness ratios: Compression elements, members subject to axial compression.</p>
+        <ul>
+            <li>
+                <span class="tag">Flanges: </span>
+                <span>{{flange1}}</span>
+            </li>
+            <li>
+                <span class="tag">Web: </span>
+                <span>{{web1}}</span>
+            </li>
+            <li>
+                <span class="tag">Section: </span>
+                <span>{{section1}}</span>
+            </li>
+        </ul>
+        <p>Width to thickness ratios: Compression elements, members subject to flexure.</p>
+        <ul>
+            <li>
+                <span class="tag">Flanges: </span>
+                <span>{{flange2}}</span>
+            </li>
+            <li>
+                <span class="tag">Web: </span>
+                <span>{{web2}}</span>
+            </li>
+            <li>
+                <span class="tag">Section: </span>
+                <span>{{section2 flange2 web2}}</span>
+            </li>
+        </ul>
+        <p>According to ANSI/AISC 341-16 the elements of this member are:</p>
+        <ul>
+            <li>
+                <span class="tag">Flanges: </span>
+                <span>{{flange3}} Element</span>
+            </li>
+            <li>
+                <span class="tag">Web: </span>
+                <span>{{web3}} Element</span>
+            </li>
+            <li>
+                <span class="tag">Therefore this is a: </span>
+                <span>{{section3 flange3 web3}} Member</span>
+            </li>
+        </ul>
+    </div>
+</template>

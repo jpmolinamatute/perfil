@@ -79,39 +79,7 @@
         </tbody>
     </table>
 
-    {{#with section}}
-        <div id="both-info">
-            <h3>Classification of sections for local buckling</h3>
-            <p>Width to thickness ratios: Compression elements, members subject to axial compression.</p>
-            <ul>
-                <li>
-                    <span class="tag">Flanges: </span>
-                    <span>{{flange1}}</span>
-                </li>
-                <li>
-                    <span class="tag">Web: </span>
-                    <span>{{web1}}</span>
-                </li>
-                <li>
-                    <span class="tag">Section: </span>
-                    <span>{{section1}}</span>
-                </li>
-            </ul>
-            <p>Width to thickness ratios: Compression elements, members subject to flexure.</p>
-            <ul>
-                <li>
-                    <span class="tag">Flanges: </span>
-                    <span>{{flange2}}</span>
-                </li>
-                <li>
-                    <span class="tag">Web: </span>
-                    <span>{{web2}}</span>
-                </li>
-                <li>
-                    <span class="tag">Section: </span>
-                    <span>{{section2}}</span>
-                </li>
-            </ul>
-        </div>
-    {{/with}}
+    {{#if both}}
+        {{> classifications material=materialRow perfil=perfilRow }}
+    {{/if}}
 </template>

@@ -1,0 +1,36 @@
+<app-perfillist (selected)="perfilLisener($event);"></app-perfillist>
+<app-materiallist (selected)="materialLisener($event);"></app-materiallist>
+
+<div id="both-info" *ngIf="bothSelected()">
+    <h3>Classification of sections for local buckling</h3>
+    <p>Width to thickness ratios: Compression elements, members subject to axial compression.</p>
+    <ul>
+        <li>
+            <span class="tag">Flanges: </span>
+            <span>{{category1.flange}}</span>
+        </li>
+        <li>
+            <span class="tag">Web: </span>
+            <span>{{category1.web}}</span>
+        </li>
+        <li>
+            <span class="tag">Section: </span>
+            <span>{{category1.section}}</span>
+        </li>
+    </ul>
+    <p>Width to thickness ratios: Compression elements, members subject to flexure.</p>
+    <ul>
+        <li>
+            <span class="tag">Flanges: </span>
+            <span>{{category2.flange2}}</span>
+        </li>
+        <li>
+            <span class="tag">Web: </span>
+            <span>{{category2.web2}}</span>
+        </li>
+        <li>
+            <span class="tag">Section: </span>
+            <span>{{category2.section2}}</span>
+        </li>
+    </ul>
+</div>

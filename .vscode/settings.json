@@ -1,11 +1,11 @@
 {
     "tslint.configFile": "angular/tslint.json",
-    "eslint.nodePath": "meteor/node_modules",
+    "eslint.nodePath": "/home/juanpa/Projects/perfil/meteor/node_modules",
     "eslint.workingDirectories": [
-        "meteor"
+        "/home/juanpa/Projects/perfil/meteor"
     ],
     "eslint.alwaysShowStatus": true,
     "eslint.options": {
-        "configFile": "meteor/package.json"
+        "configFile": "/home/juanpa/Projects/perfil/meteor/package.json"
     },
 }

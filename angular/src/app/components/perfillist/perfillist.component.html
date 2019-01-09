@@ -26,7 +26,7 @@
     <td>{{perfilRow.area}}</td>
     <td>{{perfilRow.weight}}</td>
     <td>
-        <a id="perfil-download" class="btn btn-primary" href="{{perfilFile}}" download="{{fileName}}">Download</a>
+        <a id="perfil-download" class="btn btn-primary" [href]="perfilFile" [download]="fileName">Download</a>
     </td>
 </ng-template>
 
@@ -40,9 +40,9 @@
     <tbody>
         <tr>
             <td>
-                <select class="form-control" id="perfil-list">
+                <select #perfil class="form-control" id="perfil-list" (change)='setPerfil(perfil.value)'>
                     <option value="">&#45;&#45; Select One &#45;&#45;</option>
-                    <option *ngFor="let perfilName of perfilList" value="{{perfilName}}">
+                    <option *ngFor="let perfilName of perfilList" [value]="perfilName">
                         {{perfilName}}
                     </option>
                 </select>

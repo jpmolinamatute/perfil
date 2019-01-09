@@ -83,3 +83,13 @@ export interface PerfilSVG {
     x15: number;
     y15: number;
 }
+
+export interface MaterialRawData {
+    _id: string;
+    Fy: number;
+    Fu: number;
+    E: number;
+    Ry: number;
+    Rt: number;
+    Cpr: number;
+}

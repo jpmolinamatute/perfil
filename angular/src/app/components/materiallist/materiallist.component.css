@@ -1,0 +1,13 @@
+table#material-list-wrapper th:first-child,
+table#material-list-wrapper td:first-child{
+    width: 160px;
+}
+
+table#material-list-wrapper td:first-child{
+    padding-left: 0;
+    padding-right: 0;
+}
+
+table#material-list-wrapper thead tr{
+    height: 74px;
+}

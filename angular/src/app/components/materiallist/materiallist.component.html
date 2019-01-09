@@ -1,0 +1,41 @@
+<ng-template #headers>
+    <th scope="col">F<sub>y</sub></th>
+    <th scope="col">F<sub>u</sub></th>
+    <th scope="col">E</th>
+</ng-template>
+
+<ng-template #emptyHeader>
+    <th colspan="3">&#32;</th>
+</ng-template>
+
+<ng-template #row>
+    <td>{{materialRow.Fy}}</td>
+    <td>{{materialRow.Fu}}</td>
+    <td>{{materialRow.E}}</td>
+</ng-template>
+
+<ng-template #emptyRow>
+    <td colspan="3">&#32;</td>
+</ng-template>
+
+<table id="material-list-wrapper" class="table">
+    <thead>
+        <tr>
+            <th scope="col">Material</th>
+            <ng-container *ngIf="materialSelected; then headers; else emptyHeader"> </ng-container>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <select #material class="form-control" id="material-list" (change)='setMaterial(material.value)'>
+                    <option value="">&#45;&#45; Select One &#45;&#45;</option>
+                    <option *ngFor="let materialName of materialList" [value]="materialName">
+                        {{materialName}}
+                    </option>
+                </select>
+            </td>
+            <ng-container *ngIf="materialSelected; then row; else emptyRow"> </ng-container>
+        </tr>
+    </tbody>
+</table>

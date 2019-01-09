@@ -31,9 +31,7 @@
             "type": "shell",
             "command": "ng",
             "args": [
-                "serve",
-                "--port=3004",
-                "--host=naruto.com"
+                "serve"
             ],
             "options": {
                 "cwd": "${workspaceRoot}/angular"

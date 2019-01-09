@@ -1,0 +1,13 @@
+table#perfil-list-wrapper th:first-child,
+table#perfil-list-wrapper td:first-child{
+    width: 160px;
+}
+
+table#perfil-list-wrapper td:first-child{
+    padding-left: 0;
+    padding-right: 0;
+}
+
+table#perfil-list-wrapper thead tr{
+    height: 74px;
+}

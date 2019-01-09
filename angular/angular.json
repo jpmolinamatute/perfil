@@ -58,6 +58,8 @@
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
+                        "host": "naruto.com",
+                        "port": 3004,
                         "browserTarget": "angular:build"
                     },
                     "configurations": {
