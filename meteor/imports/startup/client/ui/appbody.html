@@ -1,6 +1,6 @@
 <template name="appbody">
     <div id="layout-main">
-        <div id="layout-header">
+        <div id="layout-header" style="{{#if devel}}background-color: red;{{/if}}">
             {{#if currentUser}}
                 <!-- <div id="language-wrapper">
                     {{#if language}}
@@ -36,14 +36,20 @@
             {{/if}}
         </div>
         <div id="layout-body">
-            {{#if currentUser}}
+            {{#if devel}}
                 {{#if Template.subscriptionsReady}}
                     {{> Template.dynamic template=name data=obj}}
                 {{/if}}
             {{else}}
-                {{> loginButtons}}
+                {{#if currentUser}}
+                    {{#if Template.subscriptionsReady}}
+                        {{> Template.dynamic template=name data=obj}}
+                    {{/if}}
+                {{else}}
+                    {{> loginButtons}}
+                {{/if}}
             {{/if}}
         </div>
-        <footer></footer>
+        <div id="layout-footer" style="{{#if devel}}background-color: blue;{{/if}}"></div>
     </div>
 </template>

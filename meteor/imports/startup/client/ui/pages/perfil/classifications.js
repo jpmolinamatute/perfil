@@ -8,9 +8,29 @@ const HIGHLYDUCTILE = 'Highly ductile';
 const MODERATELYDUCTILE = 'Moderately ductile';
 const NONDUCTILE = 'Nonductile';
 
-// Template.classifications.events({
+Template.classifications.events({
+    'change input#user-input': (event, templateInstance) => {
+        templateInstance.needInput.set(event.currentTarget.checked);
+    },
+    'keyup input#pu': (event, templateInstance) => {
+        const input = event.currentTarget.value;
+        let value = 0;
 
-// });
+        if (input.length > 0 && !Number.isNaN(input)) {
+            value = Number.parseInt(input, 10);
+        }
+
+        templateInstance.pu.set(value);
+    },
+    'keyup input#phi': (event, templateInstance) => {
+        const input = event.currentTarget.value;
+        let value = 0.9;
+        if (input.length >= 0.75 && !Number.isNaN(input)) {
+            value = Number.parseInt(input, 10);
+        }
+        templateInstance.phi.set(value);
+    }
+});
 
 
 Template.classifications.helpers({
@@ -99,8 +119,41 @@ Template.classifications.helpers({
         return clas;
     },
     web3() {
+        const needinput = Template.instance().needInput.get();
         const ealma = (this.perfil.d - (2 * (this.perfil.tf + this.perfil.r))) / this.perfil.tw;
-        const lealmaD = 1.57 * this.square;
+        let lealmaD = 1.57 * this.square;
+        const phic = Template.instance().phi.get();
+        const Pu = Template.instance().pu.get();
+
+        if (needinput && phic >= 0.75) {
+            const Py = this.material.Ry * this.material.Fy * this.perfil.area;
+
+            let leesp;
+            const ca = Pu / (phic * Py);
+            console.log('#########################################################################################');
+            console.log(' ');
+            console.log('Py = Ry * Fy * Area');
+            console.log(`${Py} = ${this.material.Ry} * ${this.material.Fy} * ${this.perfil.area}`);
+            console.log('Ca = Pu /( Phic * Py)');
+            console.log(`${ca} = ${Pu} /(${phic} * ${Py})`);
+
+            if (ca <= 0.114) {
+                console.log('Ca es MENOR O IGUAL a 0.114');
+                leesp = (2.57 * Math.sqrt(this.material.E / (this.material.Ry * this.material.Fy))) * (1 - 1.04 * ca);
+            } else {
+                console.log('Ca es MAYOR a 0.114');
+                leesp = (0.88 * Math.sqrt(this.material.E / (this.material.Ry * this.material.Fy))) * (2.68 - ca);
+            }
+            console.log(`leesp = ${leesp}`);
+            console.log(' ');
+            console.log('#########################################################################################');
+
+            if (typeof leesp === 'number' && leesp >= lealmaD) {
+                lealmaD = leesp;
+            }
+        }
+
+
         return ealma <= lealmaD ? HIGHLYDUCTILE : NONDUCTILE;
     },
     section3(flange, web) {
@@ -114,13 +167,21 @@ Template.classifications.helpers({
         }
 
         return clas;
+    },
+    userInput() {
+        return Template.instance().needInput.get();
+    },
+    invalid() {
+        const pu = Template.instance().pu.get();
+        const Py = this.material.Ry * this.material.Fy * this.perfil.area;
+        return pu > Py;
     }
 });
 
 Template.classifications.onCreated(function classificationsonCreated() {
+    this.needInput = new ReactiveVar(false);
+    this.pu = new ReactiveVar(0);
+    this.phi = new ReactiveVar(0.9);
     this.data.V = Math.sqrt(this.data.material.E / this.data.material.Fy);
     this.data.square = Math.sqrt(this.data.material.E / (this.data.material.Fy * this.data.material.Ry));
-    // const lealaHD = 0.32 * this.data.square;
-    const lealaMD = 0.4 * this.data.square;
-    const lealmaD = 1.57 * this.data.square;
 });

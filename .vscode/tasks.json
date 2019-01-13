@@ -10,13 +10,13 @@
                 "cwd": "${workspaceRoot}/meteor",
                 "env": {
                     "MONGO_URL": "mongodb://meteor:dev@naruto:57017/connections",
-                    "ROOT_URL": "http://naruto.com:3004"
+                    "ROOT_URL": "http://naruto.com:3003"
                 }
             },
             "command": "meteor",
             "args": [
                 "run",
-                "--port=3004"
+                "--port=3003"
             ],
             "presentation": {
                 "panel": "dedicated",

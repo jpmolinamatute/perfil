@@ -2,7 +2,7 @@
     "name": "perfil",
     "private": true,
     "scripts": {
-        "start": "MONGO_URL='mongodb://meteor:dev@naruto:57017/connections' meteor run",
+        "start": "ROOT_URL='http://naruto.com:3004' MONGO_URL='mongodb://meteor:dev@naruto:57017/connections' meteor run --port 3004",
         "test": "meteor test --once --driver-package meteortesting:mocha"
     },
     "dependencies": {

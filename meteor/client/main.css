@@ -1,10 +1,32 @@
 html,
 body,
-div#layout-main,
-div#layout-body {
+div#layout-main{
     width: 100%;
     height: 100%;
 }
+
+div#layout-main{
+    display: flex;
+    flex-direction: column;
+}
+div#layout-body{
+    order: 2;
+    flex: 1 0 auto;
+    position: relative;
+}
+
+div#layout-footer{
+    order: 3;
+    height: 50px;
+
+}
+div#layout-header{
+    order:1;
+    height: 50px;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
 div#login-buttons{
     position: absolute;
     top: 50%;
@@ -15,11 +37,7 @@ div#login-buttons{
     margin-top: -14.5px;
 }
 
-div#layout-header{
-    height: 50px;
-    display: flex;
-    flex-direction: row-reverse;
-}
+
 
 div#layout-header >span{
     order:3;
@@ -123,7 +141,7 @@ table#perfil-list-wrapper th:first-child,
 table#perfil-list-wrapper td:first-child,
 table#material-list-wrapper th:first-child,
 table#material-list-wrapper td:first-child{
-    width: 160px;
+    width: 225px;
 }
 
 table#perfil-list-wrapper td:first-child,
@@ -135,6 +153,15 @@ table#material-list-wrapper td:first-child{
 table#perfil-list-wrapper thead tr,
 table#material-list-wrapper thead tr{
     height: 74px;
+}
+
+select#perfil-list{
+    width: 160px;
+}
+
+table#perfil-list-wrapper td >label.switch, 
+select#perfil-list{
+    display: inline-block;
 }
 
 div#language-wrapper{
@@ -199,9 +226,8 @@ div#wizard-header>h1 {
 div#wizard-content {
     order: 2;
     flex: 1;
-    width: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
+    position: relative;
+    overflow: hidden;
 }
 
 div#wizard-control {
@@ -299,4 +325,16 @@ div#step1-column svg {
     display: block;
     /* margin-bottom: 15px; */
     margin: 0 auto 15px;
+}
+
+div#perfil-screen{
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: absolute;
+}
+
+.btn-link{
+    color: black!important;
 }

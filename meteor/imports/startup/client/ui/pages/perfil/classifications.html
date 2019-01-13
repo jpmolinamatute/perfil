@@ -34,6 +34,32 @@
         <p>According to ANSI/AISC 341-16 the elements of this member are:</p>
         <ul>
             <li>
+                <span>Perfil usado para viga, columna o eslabones, como alma en flexión, o flexocompresión o
+                    flexotracción</span>
+                <label for="user-input" class="switch">
+                    <input id="user-input" type="checkbox" checked="{{userInput}}">
+                    <span class="slider round"></span>
+                </label>
+
+                {{#if userInput}}
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phi">&Phi;<sub>c</sub></label>
+                            <input id="phi" type="number" class="form-control" value="0.9">
+                        </div>
+                        <div class="form-group">
+                            <label for="pu">P<sub>u</sub></label>
+                            <input id="pu" type="number" class="form-control {{#if invalid}}is-invalid{{/if}}">
+                            {{#if invalid}}
+                                <div class="invalid-feedback">
+                                    La resistencia requerida supera la capacidad del perfil
+                                </div>
+                            {{/if}}
+                        </div>
+                    </div>
+                {{/if}}
+            </li>
+            <li>
                 <span class="tag">Flanges: </span>
                 <span>{{flange3}} Element</span>
             </li>
