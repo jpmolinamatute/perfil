@@ -35,41 +35,47 @@
                             {{/each}}
                         </select>
                     </td>
-                    {{#with perfilRow}}
-                        <td>{{d}}{{{getunit 'd'}}}</td>
-                        <td>{{bf}}{{{getunit 'bf'}}}</td>
-                        <td>{{tw}}{{{getunit 'tw'}}}</td>
-                        <td>{{tf}}{{{getunit 'tf'}}}</td>
-                        <td>{{r}}{{{getunit 'r'}}}</td>
-                        <td>{{area}}{{{getunit 'Area'}}}</td>
-                        <td>{{weight}}{{{getunit 'Peso'}}}</td>
+                    {{#if perfilCustom}}
+                        <td><input type="number" id="custom-d" min="0" class="form-control"></td>
+                        <td><input type="number" id="custom-bf" min="0" class="form-control"></td>
+                        <td><input type="number" id="custom-tw" min="0" class="form-control"></td>
+                        <td><input type="number" id="custom-tf" min="0" class="form-control"></td>
+                        {{#with perfilRow}}
+                            <td>{{r}}{{{getunit 'r'}}}</td>
+                            <td>{{area}}{{{getunit 'Area'}}}</td>
+                            <td>{{weight}}{{{getunit 'Peso'}}}</td>
+                    {{else}}
+                        <td colspan="3">&#32;</td>
+                        {{/with}}
+                        <td><input type="text" id="custom-name" class="form-control"></td>
                         <td>
-                            <a id="perfil-download" class="btn btn-link" href="{{perfilFile}}" download="{{fileName}}">
-                                <i class="fas fa-download"></i>
-                            </a>
-                        </td>
-                        {{else}}
-                            {{#if perfilCustom}}
-                                <td><input type="number" id="custom-d" min="0" class="form-control"></td>
-                                <td><input type="number" id="custom-bf" min="0" class="form-control"></td>
-                                <td><input type="number" id="custom-tw" min="0" class="form-control"></td>
-                                <td><input type="number" id="custom-tf" min="0" class="form-control"></td>
-                                <td>0</td>
-                                <td>{{a}}</td>
-                                <td>{{w}}</td>
-                                <td><input type="text" id="custom-name" class="form-control"></td>
-                                <td>
-                                    <button type="button" id="save-custom" class="btn btn-link">
-                                        <i class="far fa-save"></i>
-                                    </button>
-                                    <a id="perfil-download" class="btn btn-link" href="{{perfilFile}}" download="{{fileName}}">
-                                        <i class="fas fa-download"></i>
-                                    </a>
-                                </td>
-                            {{else}}
-                                <td colspan="8">&#32;</td>
+                            <button type="button" id="save-custom" class="btn btn-link">
+                                <i class="far fa-save"></i>
+                            </button>
+                            {{#if canDownloadCustom}}
+                                <a id="perfil-download" class="btn btn-link" href="{{perfilFile}}" download="{{fileName}}">
+                                    <i class="fas fa-download"></i>
+                                </a>
                             {{/if}}
-                    {{/with}}
+                        </td>
+                    {{else}}
+                        {{#with perfilRow}}
+                            <td>{{d}}{{{getunit 'd'}}}</td>
+                            <td>{{bf}}{{{getunit 'bf'}}}</td>
+                            <td>{{tw}}{{{getunit 'tw'}}}</td>
+                            <td>{{tf}}{{{getunit 'tf'}}}</td>
+                            <td>{{r}}{{{getunit 'r'}}}</td>
+                            <td>{{area}}{{{getunit 'Area'}}}</td>
+                            <td>{{weight}}{{{getunit 'Peso'}}}</td>
+                            <td>
+                                <a id="perfil-download" class="btn btn-link" href="{{perfilFile}}" download="{{fileName}}">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </td>
+                    {{else}}
+                        <td colspan="8">&#32;</td>
+                        {{/with}}
+                    {{/if}}
                 </tr>
             </tbody>
         </table>
@@ -109,7 +115,7 @@
         </table>
 
         {{#if both}}
-            {{> classifications material=materialRow perfil=perfilRow }}
+            {{> classifications material=materialRow perfil=perfilRow perfilCustom=perfilCustom}}
         {{/if}}
     </div>
 </template>

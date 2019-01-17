@@ -164,6 +164,11 @@ select#perfil-list{
     display: inline-block;
 }
 
+
+
+table#perfil-list-wrapper tbody td:last-child{
+    width: 140px;
+}
 div#language-wrapper{
     width: 50px;
 }

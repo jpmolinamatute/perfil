@@ -5,9 +5,6 @@ import './pages/login/login';
 import { Meteor } from 'meteor/meteor';
 
 Template.appbody.helpers({
-    devel() {
-        return Meteor.isDevelopment;
-    },
     language() {
         return Template.instance().language.get();
     },
@@ -67,14 +64,6 @@ Template.appbody.helpers({
                 console.log('cancel');
             }
         };
-    },
-    pictureURL() {
-        const user = Meteor.user();
-        let picture = false;
-        if (typeof user === 'object' && typeof user.services === 'object') {
-            picture = user.services.google.picture;
-        }
-        return picture;
     }
 });
 
@@ -93,8 +82,4 @@ Template.appbody.onCreated(function appbodyonCreated() {
     this.subscribe('perfil');
     this.subscribe('materials');
     this.subscribe('units');
-    this.autorun(() => {
-        Meteor.userId();
-        this.subscribe('pictures');
-    });
 });

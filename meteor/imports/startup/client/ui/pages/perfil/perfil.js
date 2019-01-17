@@ -1,7 +1,7 @@
 import './perfil.html';
 import './classifications.js';
 import { perfil, units, materials } from '../../../../both/collections.js';
-import PerfilClass from '../../components/perfilClass';
+import { PerfilClass, BuiltIn, CustomPerfil } from '../../components/perfilClass';
 
 // @TODO: remove weight and area from collection
 
@@ -40,7 +40,7 @@ function checkValue(value, element) {
 Template.perfil.events({
     'change select#perfil-list': (event, templateInstance) => {
         const perfilName = event.currentTarget.value.length > 0 ? event.currentTarget.value : false;
-        const obj = typeof perfilName === 'string' ? new PerfilClass(perfilName) : false;
+        const obj = typeof perfilName === 'string' ? new BuiltIn(perfilName) : false;
         templateInstance.perfilSelected.set(perfilName);
         templateInstance.perfilClass.set(obj);
     },
@@ -50,10 +50,8 @@ Template.perfil.events({
     },
     'change input#perfil-custom': (event, templateInstance) => {
         const checked = event.currentTarget.checked;
-        if (checked) {
-            templateInstance.perfilSelected.set(!checked);
-            templateInstance.perfilClass.set(!checked);
-        }
+        templateInstance.perfilSelected.set(false);
+        templateInstance.perfilClass.set(false);
         templateInstance.perfilCustom.set(checked);
     },
     'click button#save-custom': (event, templateInstance) => {
@@ -61,6 +59,8 @@ Template.perfil.events({
         const bf = document.getElementById('custom-bf');
         const tw = document.getElementById('custom-tw');
         const tf = document.getElementById('custom-tf');
+        const name = document.getElementById('custom-name').value;
+        const validName = typeof name === 'string' && name.length > 0;
 
         const dValue = getValue(d.value);
         checkValue(dValue, d);
@@ -77,28 +77,24 @@ Template.perfil.events({
         if (typeof dValue === 'number'
             && typeof bfValue === 'number'
             && typeof twValue === 'number'
-            && typeof tfValue === 'number') {
-            const a = ((bfValue * tfValue * 2) + (dValue - (2 * tfValue)) * twValue) / 100;
-            const w = (a / 10000) * 7850;
-            templateInstance.a.set(a);
-            templateInstance.w.set(w);
+            && typeof tfValue === 'number'
+            && validName) {
+            const obj = new CustomPerfil(name, bfValue, tfValue, dValue, twValue);
+            templateInstance.perfilClass.set(obj);
+            templateInstance.perfilSelected.set(name);
         } else {
-            templateInstance.a.set(false);
-            templateInstance.w.set(false);
+            templateInstance.perfilClass.set(false);
         }
         event.stopPropagation();
     }
 });
 
 Template.perfil.helpers({
-    a() {
-        return Template.instance().a.get();
-    },
-    w() {
-        return Template.instance().w.get();
-    },
     perfilCustom() {
         return Template.instance().perfilCustom.get();
+    },
+    canDownloadCustom() {
+        return Template.instance().perfilClass.get() && Template.instance().perfilSelected.get();
     },
     perfilList() {
         return perfil.find({}, { fields: { _id: 1 }, sort: { _id: 1 } });
@@ -160,10 +156,6 @@ Template.perfil.onCreated(function perfilononCreated() {
     this.perfilSelected = new ReactiveVar(false);
     this.materialSelected = new ReactiveVar(false);
     this.perfilCustom = new ReactiveVar(false);
-    this.a = new ReactiveVar(false);
-    this.w = new ReactiveVar(false);
-
-
     this.perfilClass = new ReactiveVar(false, (old, newer) => {
         let equal = false;
         if (old instanceof PerfilClass && newer instanceof PerfilClass) {

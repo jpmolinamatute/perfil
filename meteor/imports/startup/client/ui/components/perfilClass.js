@@ -1,15 +1,12 @@
 import { check, Match } from 'meteor/check';
 import { perfil } from '../../../both/collections.js';
 
-
-export default class PerfilClass {
+export class PerfilClass {
     outputType = null;
 
     z = null;
 
-    constructor(name) {
-        check(name, String);
-        const perfilInstance = perfil.findOne({ _id: name }, { reactive: false });
+    constructor(perfilInstance) {
         check(perfilInstance, {
             _id: String,
             d: {
@@ -66,15 +63,6 @@ export default class PerfilClass {
         return result;
     }
 
-    setZ(outputType) {
-        check(outputType, Match.OneOf('standard', 'american', 'fraction'));
-        this.outputType = outputType;
-        const tf = this.getValue('tf');
-        const r = this.getValue('r');
-        this.z = tf + r;
-    }
-
-
     getData(outputType = 'standard') {
         this.setZ(outputType);
         return {
@@ -86,6 +74,14 @@ export default class PerfilClass {
             area: this.getValue('area'),
             weight: this.getValue('weight')
         };
+    }
+
+    setZ(outputType) {
+        check(outputType, Match.OneOf('standard', 'american', 'fraction'));
+        this.outputType = outputType;
+        const tf = this.getValue('tf');
+        const r = this.getValue('r');
+        this.z = tf + r;
     }
 
     /* eslint-disable class-methods-use-this */
@@ -315,5 +311,50 @@ zoom 0.9x `;
             x15: this.point15().x,
             y15: this.point15().y
         };
+    }
+}
+
+export class BuiltIn extends PerfilClass {
+    constructor(name) {
+        check(name, String);
+        const perfilInstance = perfil.findOne({ _id: name }, { reactive: false });
+        super(perfilInstance);
+    }
+}
+
+export class CustomPerfil extends PerfilClass {
+    constructor(_id, bf, tf, d, tw) {
+        check(_id, String);
+        check(bf, Number);
+        check(tf, Number);
+        check(d, Number);
+        check(tw, Number);
+        const area = ((bf * tf * 2) + (d - (2 * tf)) * tw) / 100;
+        const weight = (area / 10000) * 7850;
+        const perfilInstance = {
+            _id,
+            d: {
+                standard: d
+            },
+            bf: {
+                standard: bf
+            },
+            tw: {
+                standard: tw
+            },
+            tf: {
+                standard: tf
+            },
+            r: {
+                standard: 0
+            },
+            area: {
+                standard: area
+            },
+            weight: {
+                standard: weight
+            }
+        };
+        super(perfilInstance);
     }
 }
