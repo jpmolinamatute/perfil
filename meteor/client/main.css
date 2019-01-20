@@ -137,38 +137,71 @@ border-radius: 34px;
 border-radius: 50%;
 }
 
-table#perfil-list-wrapper th:first-child,
-table#perfil-list-wrapper td:first-child,
 table#material-list-wrapper th:first-child,
-table#material-list-wrapper td:first-child{
-    width: 225px;
+table#perfil-list-wrapper th:first-child,
+table#material-list-wrapper td:first-child,
+table#perfil-list-wrapper td:first-child{
+    width: 16.666667%;
 }
 
-table#perfil-list-wrapper td:first-child,
-table#material-list-wrapper td:first-child{
-    padding-left: 0;
-    padding-right: 0;
+table#perfil-list-wrapper th{
+    vertical-align: top;
+    height: 98px;
 }
 
-table#perfil-list-wrapper thead tr,
-table#material-list-wrapper thead tr{
-    height: 74px;
-}
-
-select#perfil-list{
-    width: 160px;
-}
-
-table#perfil-list-wrapper td >label.switch, 
-select#perfil-list{
-    display: inline-block;
-}
-
-
-
+table#perfil-list-wrapper thead th:last-child,
 table#perfil-list-wrapper tbody td:last-child{
-    width: 140px;
+    width: 111px;
 }
+
+div#show-perfil-list{
+    position: absolute;
+    /* width: 16.666667%; */
+    display: none;
+    height: 200px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+ul#perfil-list{
+    width: 100%;
+    background-color: white;
+    border: black 1px solid;
+    padding: 0;
+}
+
+ul#perfil-list li{
+    list-style: none;
+}
+
+ul#perfil-list button {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+ul#perfil-list button:hover{
+    background-color: red;
+}
+
+
+div#perfil-controls{
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+button#save-custom{
+    position: absolute;
+    left: 0;
+}
+
+a#perfil-download{
+    position: absolute;
+    right: 0;
+    color: black;
+}
+
 div#language-wrapper{
     width: 50px;
 }
@@ -177,13 +210,12 @@ div#language-wrapper > label {
     margin-top: 8px;
 }
 
-table .centered {
+table .centered,
+table#material-list-wrapper th,
+table#material-list-wrapper td,
+table#perfil-list-wrapper th,
+table#perfil-list-wrapper td {
     text-align: center;
-}
-
-
-div#both-info > ul{
-    list-style: none;
 }
 
 div#both-info .tag{
@@ -335,9 +367,48 @@ div#step1-column svg {
 div#perfil-screen{
     height: 100%;
     width: 100%;
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+}
+
+div#perfil-screen > div:first-child{
+    flex: 1 1 auto;
+    order: 1;
+    overflow: hidden;
+}
+
+div#both-info{
+    flex: 0 0 500px;
+    padding: 20px;
+    order:2;
+}
+
+
+div#both-info > div.wrapper{
+    background-color: white;
+    border: solid 2px black;
+    padding: 10px;
+    height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
+    position: relative;
+}
+
+
+div#both-info > div.wrapper div {
     position: absolute;
+    width: 50%;
+    padding: 10px;
+}
+div#both-info > div.wrapper div:first-child{
+    /* background-color: purple; */
+    left: 0;
+}
+
+div#both-info > div.wrapper div:nth-child(2){
+    /* background-color: lightblue; */
+    right: 0;
 }
 
 .btn-link{

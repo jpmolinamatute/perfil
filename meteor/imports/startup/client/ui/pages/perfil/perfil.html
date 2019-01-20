@@ -1,121 +1,167 @@
 <template name="perfil">
     <div id="perfil-screen">
-        <table id="perfil-list-wrapper" class="table">
-            <thead>
-                <tr>
-                    <th>Perfil</th>
-                    {{#if perfilSelected}}
-                        <th scope="col">Overall depth of member<br>d</th>
-                        <th scope="col">Flange width<br>b<sub>f</sub></th>
-                        <th scope="col">Web thickness<br>t<sub>w</sub></th>
-                        <th scope="col">Flange thickness<br>t<sub>f</sub></th>
-                        <th scope="col">Fillet radius<br>r</th>
-                        <th scope="col">Cross-sectional area<br>Area</th>
-                        <th scope="col">Weight</th>
-                        {{#if perfilCustom}}
-                            <th scope="col">Nombre del perfil</th>
-                        {{/if}}
-                        <th>&#32;</th>
-                    {{else}}
-                        <th colspan="8">&#32;</th>
-                    {{/if}}
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <label for="perfil-custom" class="switch">
-                            <input id="perfil-custom" type="checkbox" checked="{{perfilCustom}}">
+        <div>
+            <div class="row">
+                <div id="unit-wrapper" class="form-group col-md-2">
+                    <label for="unit-type">Unidad</label>
+                    <select id="unit-type" class="form-control">
+                        <option value="standard">Standard</option>
+                        <option value="american">American</option>
+                        <option value="other">other</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <span>Built up</span>
+                    <label for="perfil-custom" class="switch">
+                        <input id="perfil-custom" type="checkbox" checked="{{perfilCustom}}">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                {{#if both}}
+                    <div class="col-md-4">
+                        <span>Perfil usado para viga, columna o eslabones, como alma en flexión, o flexocompresión o
+                            flexotracción</span>
+                        <label for="user-input" class="switch">
+                            <input id="user-input" type="checkbox" checked="{{userInput}}">
                             <span class="slider round"></span>
                         </label>
-                        <select class="form-control" id="perfil-list" disabled="{{perfilCustom}}">
-                            <option value="" selected="{{isPerfilSelected false}}">&#45;&#45; Select One &#45;&#45;</option>
-                            {{#each perfilList}}
-                                <option value="{{_id}}" selected="{{isPerfilSelected _id}}">{{_id}}</option>
-                            {{/each}}
-                        </select>
-                    </td>
-                    {{#if perfilCustom}}
-                        <td><input type="number" id="custom-d" min="0" class="form-control"></td>
-                        <td><input type="number" id="custom-bf" min="0" class="form-control"></td>
-                        <td><input type="number" id="custom-tw" min="0" class="form-control"></td>
-                        <td><input type="number" id="custom-tf" min="0" class="form-control"></td>
-                        {{#with perfilRow}}
-                            <td>{{r}}{{{getunit 'r'}}}</td>
-                            <td>{{area}}{{{getunit 'Area'}}}</td>
-                            <td>{{weight}}{{{getunit 'Peso'}}}</td>
-                    {{else}}
-                        <td colspan="3">&#32;</td>
-                        {{/with}}
-                        <td><input type="text" id="custom-name" class="form-control"></td>
-                        <td>
-                            <button type="button" id="save-custom" class="btn btn-link">
-                                <i class="far fa-save"></i>
-                            </button>
-                            {{#if canDownloadCustom}}
-                                <a id="perfil-download" class="btn btn-link" href="{{perfilFile}}" download="{{fileName}}">
-                                    <i class="fas fa-download"></i>
-                                </a>
+                    </div>
+                    {{#if userInput}}
+                        <div class="form-group col-md-2">
+                            <label for="phi">&Phi;<sub>c</sub></label>
+                            <input id="phi" type="number" class="form-control" value="0.9">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="pu">P<sub>u</sub></label>
+                            <input id="pu" type="number" class="form-control {{#if invalid}}is-invalid{{/if}}">
+                            {{#if invalid materialRow perfilRow}}
+                                <div class="invalid-feedback">
+                                    La resistencia requerida supera la capacidad del perfil
+                                </div>
                             {{/if}}
+                        </div>
+                    {{/if}}
+                {{/if}}
+            </div>
+            <table id="perfil-list-wrapper" class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        {{#if perfilSelected}}
+                            <th scope="col">Overall depth<br>(d)</th>
+                            <th scope="col">Flange width<br>(b<sub>f</sub>)</th>
+                            <th scope="col">Web thickness<br>(t<sub>w</sub>)</th>
+                            <th scope="col">Flange thickness<br>(t<sub>f</sub>)</th>
+                            <th scope="col">Fillet radius</th>
+                            <th scope="col">Cross-sectional area</th>
+                            <th scope="col">Weight</th>
+                            <th>&#32;</th>
+                        {{else}}
+                            <th colspan="8">&#32;</th>
+                        {{/if}}
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="text" id="custom-name" class="form-control">
+                            <div id="show-perfil-list">
+                                <ul id="perfil-list">
+                                    {{#each perfilList}}
+                                        <li>
+                                            <button type="button" data-value="{{_id}}">{{_id}}</button>
+                                        </li>
+                                    {{/each}}
+                                </ul>
+                            </div>
                         </td>
-                    {{else}}
-                        {{#with perfilRow}}
-                            <td>{{d}}{{{getunit 'd'}}}</td>
-                            <td>{{bf}}{{{getunit 'bf'}}}</td>
-                            <td>{{tw}}{{{getunit 'tw'}}}</td>
-                            <td>{{tf}}{{{getunit 'tf'}}}</td>
-                            <td>{{r}}{{{getunit 'r'}}}</td>
-                            <td>{{area}}{{{getunit 'Area'}}}</td>
-                            <td>{{weight}}{{{getunit 'Peso'}}}</td>
-                            <td>
-                                <a id="perfil-download" class="btn btn-link" href="{{perfilFile}}" download="{{fileName}}">
-                                    <i class="fas fa-download"></i>
-                                </a>
-                            </td>
-                    {{else}}
-                        <td colspan="8">&#32;</td>
-                        {{/with}}
-                    {{/if}}
-                </tr>
-            </tbody>
-        </table>
-
-        <table id="material-list-wrapper" class="table">
-            <thead>
-                <tr>
-                    <th scope="col">Material</th>
-                    {{#if materialSelected}}
-                        <th scope="col">F<sub>y</sub></th>
-                        <th scope="col">F<sub>u</sub></th>
-                        <th scope="col">E</th>
-                    {{else}}
-                        <th colspan="3">&#32;</th>
-                    {{/if}}
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <select class="form-control" id="material-list">
-                            <option value="" selected="{{isMaterialSelected false}}">&#45;&#45; Select One &#45;&#45;</option>
-                            {{#each materialList}}
-                                <option value="{{_id}}" selected="{{isMaterialSelected _id}}">{{_id}}</option>
-                            {{/each}}
-                        </select>
-                    </td>
-                    {{#with materialRow}}
-                        <td>{{Fy}}</td>
-                        <td>{{Fu}}</td>
-                        <td>{{E}}</td>
+                        {{#if perfilCustom}}
+                            <td><input type="number" id="custom-d" min="0" class="form-control"></td>
+                            <td><input type="number" id="custom-bf" min="0" class="form-control"></td>
+                            <td><input type="number" id="custom-tw" min="0" class="form-control"></td>
+                            <td><input type="number" id="custom-tf" min="0" class="form-control"></td>
+                            {{#with perfilRow}}
+                                <td>{{r}}{{{getunit 'r'}}}</td>
+                                <td>{{area}}{{{getunit 'Area'}}}</td>
+                                <td>{{weight}}{{{getunit 'Peso'}}}</td>
                         {{else}}
                             <td colspan="3">&#32;</td>
-                    {{/with}}
-                </tr>
-            </tbody>
-        </table>
+                            {{/with}}
+                            <td>
+                                <div id="perfil-controls">
+                                    <button type="button" id="save-custom" class="btn btn-default">
+                                        <i class="far fa-save"></i>
+                                    </button>
+                                    {{#if canDownloadCustom}}
+                                        <a id="perfil-download" class="btn btn-default" href="{{perfilFile}}" download="{{fileName}}">
+                                            <i class="fas fa-download"></i>
+                                        </a>
+                                    {{/if}}
+                                </div>
+                            </td>
+                        {{else}}
+                            {{#with perfilRow}}
+                                <td>{{d}}{{{getunit 'd'}}}</td>
+                                <td>{{bf}}{{{getunit 'bf'}}}</td>
+                                <td>{{tw}}{{{getunit 'tw'}}}</td>
+                                <td>{{tf}}{{{getunit 'tf'}}}</td>
+                                <td>{{r}}{{{getunit 'r'}}}</td>
+                                <td>{{area}}{{{getunit 'Area'}}}</td>
+                                <td>{{weight}}{{{getunit 'Peso'}}}</td>
+                                <td>
+                                    <div id="perfil-controls">
+                                        <a id="perfil-download" class="btn btn-default" href="{{perfilFile}}" download="{{fileName}}">
+                                            <i class="fas fa-download"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                        {{else}}
+                            <td colspan="8">
+                                {{#if notFound}}Member "{{notFound}}" not found{{else}}&#32;{{/if}}
+                            </td>
+                            {{/with}}
+                        {{/if}}
+                    </tr>
+                </tbody>
+            </table>
 
-        {{#if both}}
-            {{> classifications material=materialRow perfil=perfilRow perfilCustom=perfilCustom}}
-        {{/if}}
+            <table id="material-list-wrapper" class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Material</th>
+                        {{#if materialSelected}}
+                            <th scope="col">Specified minimum yield stress<br>(F<sub>y</sub>)</th>
+                            <th scope="col">Specified minimum tensile strength<br>(F<sub>u</sub>)</th>
+                            <th scope="col"><br>(R<sub>y</sub>)</th>
+                            <th scope="col">Modulus of elasticity<br>(E)</th>
+                        {{else}}
+                            <th colspan="3">&#32;</th>
+                        {{/if}}
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <select class="form-control" id="material-list">
+                                <option value="" selected="{{isMaterialSelected false}}">&#45;&#45; Select One
+                                    &#45;&#45;</option>
+                                {{#each materialList}}
+                                    <option value="{{_id}}" selected="{{isMaterialSelected _id}}">{{_id}}</option>
+                                {{/each}}
+                            </select>
+                        </td>
+                        {{#with materialRow}}
+                            <td>{{Fy}}</td>
+                            <td>{{Fu}}</td>
+                            <td>{{Ry}}</td>
+                            <td>{{E}}</td>
+                            {{else}}
+                                <td colspan="3">&#32;</td>
+                        {{/with}}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        {{> classifications (data materialRow)}}
     </div>
 </template>

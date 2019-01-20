@@ -9,34 +9,10 @@ const MODERATELYDUCTILE = 'Moderately ductile';
 const NONDUCTILE = 'Nonductile';
 
 
-Template.classifications.events({
-    'change input#user-input': (event, templateInstance) => {
-        templateInstance.needInput.set(event.currentTarget.checked);
-        templateInstance.phi.set(0.9);
-        templateInstance.pu.set(0);
-    },
-    'keyup input#pu': (event, templateInstance) => {
-        const input = event.currentTarget.value;
-        let value = 0;
-
-        if (input.length > 0 && !Number.isNaN(input)) {
-            value = Number.parseInt(input, 10);
-        }
-
-        templateInstance.pu.set(value);
-    },
-    'keyup input#phi': (event, templateInstance) => {
-        const input = event.currentTarget.value;
-        let value = 0.9;
-        if (input.length >= 0.75 && !Number.isNaN(input)) {
-            value = Number.parseInt(input, 10);
-        }
-        templateInstance.phi.set(value);
-    }
-});
-
-
 Template.classifications.helpers({
+    classType() {
+        return this.perfilCustom ? 'Built-up' : 'Rolled';
+    },
     flange1() {
         const eala = (this.perfil.bf / 2) / this.perfil.tf;
         let V;
@@ -151,16 +127,15 @@ Template.classifications.helpers({
         return clas;
     },
     web3() {
-        const needinput = Template.instance().needInput.get();
         const ealma = (this.perfil.d - (2 * (this.perfil.tf + this.perfil.r))) / this.perfil.tw;
         const square = Math.sqrt(this.material.E / (this.material.Fy * this.material.Ry));
         const lealmaD = 1.57 * square;
-        const phic = Template.instance().phi.get();
-        const Pu = Template.instance().pu.get();
+        const phic = this.phi;
+        const Pu = this.pu;
         let txt = false;
 
 
-        if (needinput && phic >= 0.75) {
+        if (this.needInput && phic >= 0.75) {
             const Py = this.material.Ry * this.material.Fy * this.perfil.area;
             const aConstant = Math.sqrt(this.material.E / (this.material.Ry * this.material.Fy));
             let leesphd;
@@ -225,19 +200,5 @@ Template.classifications.helpers({
         }
 
         return clas;
-    },
-    userInput() {
-        return Template.instance().needInput.get();
-    },
-    invalid() {
-        const pu = Template.instance().pu.get();
-        const Py = this.material.Ry * this.material.Fy * this.perfil.area;
-        return pu > Py;
     }
-});
-
-Template.classifications.onCreated(function classificationsonCreated() {
-    this.needInput = new ReactiveVar(false);
-    this.pu = new ReactiveVar(0);
-    this.phi = new ReactiveVar(0.9);
 });

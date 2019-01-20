@@ -37,12 +37,28 @@ function checkValue(value, element) {
     }
 }
 
+function setPerfilName(perfilName, templateInstance) {
+    const obj = new BuiltIn(perfilName);
+    templateInstance.perfilSelected.set(perfilName);
+    templateInstance.perfilClass.set(obj);
+    templateInstance.searchPatter.set(false);
+    document.getElementById('show-perfil-list').style.display = 'none';
+    document.getElementById('custom-name').value = perfilName;
+}
+
 Template.perfil.events({
-    'change select#perfil-list': (event, templateInstance) => {
-        const perfilName = event.currentTarget.value.length > 0 ? event.currentTarget.value : false;
-        const obj = typeof perfilName === 'string' ? new BuiltIn(perfilName) : false;
-        templateInstance.perfilSelected.set(perfilName);
-        templateInstance.perfilClass.set(obj);
+    'focus input#custom-name': (event, templateInstance) => {
+        const custom = templateInstance.perfilCustom.get();
+        if (!custom) {
+            const list = document.getElementById('show-perfil-list');
+            const width = document.getElementById('custom-name').clientWidth;
+            list.style.display = 'block';
+            list.style.width = `${width}px`;
+        }
+    },
+    'click ul#perfil-list button': (event, templateInstance) => {
+        const perfilName = event.currentTarget.dataset.value;
+        setPerfilName(perfilName, templateInstance);
     },
     'change select#material-list': (event, templateInstance) => {
         const materialName = event.currentTarget.value.length > 0 ? event.currentTarget.value : false;
@@ -86,10 +102,59 @@ Template.perfil.events({
             templateInstance.perfilClass.set(false);
         }
         event.stopPropagation();
+    },
+    'change input#user-input': (event, templateInstance) => {
+        templateInstance.needInput.set(event.currentTarget.checked);
+        templateInstance.phi.set(0.9);
+        templateInstance.pu.set(0);
+    },
+    'keyup input#pu': (event, templateInstance) => {
+        const input = event.currentTarget.value;
+        let value = 0;
+
+        if (input.length > 0 && !Number.isNaN(input)) {
+            value = Number.parseInt(input, 10);
+        }
+
+        templateInstance.pu.set(value);
+    },
+    'keyup input#phi': (event, templateInstance) => {
+        const input = event.currentTarget.value;
+        let value = 0.9;
+        if (input.length >= 0.75 && !Number.isNaN(input)) {
+            value = Number.parseInt(input, 10);
+        }
+        templateInstance.phi.set(value);
+    },
+    'keyup input#custom-name': (event, templateInstance) => {
+        const custom = templateInstance.perfilCustom.get();
+        if (!custom) {
+            let value = event.currentTarget.value;
+            if (typeof value === 'string' && value.trim().length > 0) {
+                value = value.trim();
+                if (event.key === 'Enter') {
+                    value = value.toUpperCase();
+                    if (perfil.find({ _id: value }).count() === 1) {
+                        setPerfilName(value, templateInstance);
+                        templateInstance.notFound.set(false);
+                    } else {
+                        templateInstance.notFound.set(value);
+                        templateInstance.perfilClass.set(false);
+                    }
+                } else {
+                    templateInstance.searchPatter.set(value);
+                }
+            } else {
+                templateInstance.searchPatter.set(false);
+            }
+        }
     }
 });
 
 Template.perfil.helpers({
+    notFound() {
+        return Template.instance().notFound.get();
+    },
     perfilCustom() {
         return Template.instance().perfilCustom.get();
     },
@@ -97,7 +162,18 @@ Template.perfil.helpers({
         return Template.instance().perfilClass.get() && Template.instance().perfilSelected.get();
     },
     perfilList() {
-        return perfil.find({}, { fields: { _id: 1 }, sort: { _id: 1 } });
+        let data = false;
+        const custom = Template.instance().perfilCustom.get();
+
+        if (!custom) {
+            const pattern = Template.instance().searchPatter.get();
+            const query = {};
+            if (typeof pattern === 'string') {
+                query._id = { $regex: pattern, $options: 'i' };
+            }
+            data = perfil.find(query, { fields: { _id: 1 }, sort: { _id: 1 } });
+        }
+        return data;
     },
     materialList() {
         return materials.find({}, { fields: { _id: 1 }, sort: { _id: 1 } });
@@ -131,6 +207,18 @@ Template.perfil.helpers({
             reactive: false
         });
     },
+    data(material) {
+        const perfilClass = Template.instance().perfilClass.get();
+        return {
+            material,
+            ready: Template.instance().perfilSelected.get() && Template.instance().materialSelected.get(),
+            perfil: perfilClass instanceof PerfilClass ? perfilClass.getData() : false,
+            perfilCustom: Template.instance().perfilCustom.get(),
+            phic: Template.instance().phi.get(),
+            Pu: Template.instance().pu.get(),
+            needInput: Template.instance().needInput.get()
+        };
+    },
     both() {
         return Template.instance().perfilSelected.get() && Template.instance().materialSelected.get();
     },
@@ -149,13 +237,31 @@ Template.perfil.helpers({
     fileName() {
         const perfilInstance = Template.instance().perfilSelected.get();
         return typeof perfilInstance === 'string' ? `${perfilInstance}.scr` : false;
+    },
+    userInput() {
+        return Template.instance().needInput.get();
+    },
+    invalid(material, perfilData) {
+        let invalid = false;
+        const pu = Template.instance().pu.get();
+
+        if (typeof pu === 'number' && typeof material === 'object' && typeof perfilData === 'object') {
+            invalid = pu > (material.Ry * material.Fy * perfilData.area);
+        }
+
+        return invalid;
     }
 });
 
 Template.perfil.onCreated(function perfilononCreated() {
+    this.needInput = new ReactiveVar(false);
+    this.pu = new ReactiveVar(0);
+    this.phi = new ReactiveVar(0.9);
     this.perfilSelected = new ReactiveVar(false);
     this.materialSelected = new ReactiveVar(false);
     this.perfilCustom = new ReactiveVar(false);
+    this.searchPatter = new ReactiveVar(false);
+    this.notFound = new ReactiveVar(false);
     this.perfilClass = new ReactiveVar(false, (old, newer) => {
         let equal = false;
         if (old instanceof PerfilClass && newer instanceof PerfilClass) {

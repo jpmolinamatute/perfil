@@ -1,76 +1,71 @@
 <template name="classifications">
     <div id="both-info">
-        <h3>Classification of sections for local buckling</h3>
-        <p>Width to thickness ratios: Compression elements, members subject to axial compression.</p>
-        <ul>
-            <li>
-                <span class="tag">Flanges: </span>
-                <span>{{flange1}}</span>
-            </li>
-            <li>
-                <span class="tag">Web: </span>
-                <span>{{web1}}</span>
-            </li>
-            <li>
-                <span class="tag">Section: </span>
-                <span>{{section1}}</span>
-            </li>
-        </ul>
-        <p>Width to thickness ratios: Compression elements, members subject to flexure.</p>
-        <ul>
-            <li>
-                <span class="tag">Flanges: </span>
-                <span>{{flange2}}</span>
-            </li>
-            <li>
-                <span class="tag">Web: </span>
-                <span>{{web2}}</span>
-            </li>
-            <li>
-                <span class="tag">Section: </span>
-                <span>{{section2 flange2 web2}}</span>
-            </li>
-        </ul>
-        <p>According to ANSI/AISC 341-16 the elements of this member are:</p>
-        <ul>
-            <li>
-                <span>Perfil usado para viga, columna o eslabones, como alma en flexión, o flexocompresión o
-                    flexotracción</span>
-                <label for="user-input" class="switch">
-                    <input id="user-input" type="checkbox" checked="{{userInput}}">
-                    <span class="slider round"></span>
-                </label>
-
-                {{#if userInput}}
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="phi">&Phi;<sub>c</sub></label>
-                            <input id="phi" type="number" class="form-control" value="0.9">
-                        </div>
-                        <div class="form-group">
-                            <label for="pu">P<sub>u</sub></label>
-                            <input id="pu" type="number" class="form-control {{#if invalid}}is-invalid{{/if}}">
-                            {{#if invalid}}
-                                <div class="invalid-feedback">
-                                    La resistencia requerida supera la capacidad del perfil
-                                </div>
+        {{#if ready}}
+            <div class="wrapper">
+                <div>
+                    <h3>Classification of sections for local buckling according to ANSI/AISC 360-16.</h3>
+                    <ol>
+                        <li>
+                            <p>Width to thickness ratios: Compression elements, members subject to axial compression.</p>
+                            <ul>
+                                <li>
+                                    <span class="tag">Flanges of {{classType}} I-shaped sections: </span>
+                                    <span>{{flange1}}</span>
+                                </li>
+                                <li>
+                                    <span class="tag">Web of {{classType}} I-shaped sections: </span>
+                                    <span>{{web1}}</span>
+                                </li>
+                            </ul>
+                            <p>Therefore this is a {{section1}} section.</p>
+                        </li>
+                        <li>
+                            <p>Width to thickness ratios: Compression elements, members subject to flexure.</p>
+                            <ul>
+                                <li>
+                                    <span class="tag">Flanges of {{classType}} I-shaped sections: </span>
+                                    <span>{{flange2}}</span>
+                                </li>
+                                <li>
+                                    <span class="tag">Web of {{classType}} sections: </span>
+                                    <span>{{web2}}</span>
+                                </li>
+                            </ul>
+                            <p>Therefore this is a {{section2 flange2 web2}} section.</p>
+                            {{#if perfilCustom}}
+                                <p>Note: Structural steel sections shall have flanges continuously connected to the web
+                                    in
+                                    order to classify as a compact-element section.</p>
                             {{/if}}
-                        </div>
-                    </div>
-                {{/if}}
-            </li>
-            <li>
-                <span class="tag">Flanges: </span>
-                <span>{{flange3}} Element</span>
-            </li>
-            <li>
-                <span class="tag">Web: </span>
-                <span>{{web3}} Element</span>
-            </li>
-            <li>
-                <span class="tag">Therefore this is a: </span>
-                <span>{{section3 flange3 web3}} Member</span>
-            </li>
-        </ul>
+                        </li>
+                    </ol>
+                </div>
+                <div>
+                    <h3>Classification of sections for ductility according to ANSI/AISC 341-16.</h3>
+                    <ol>
+                        <li>
+                            <p>Limiting width-to-thickness ratios for compression elements for moderately and highly
+                                ductile members.</p>
+                            <ul>
+                                <li>
+                                    <span class="tag">Flanges of {{classType}} I-shaped sections: </span>
+                                    <span>{{flange3}} Element</span>
+                                </li>
+                                <li>
+                                    <span class="tag">Web of {{classType}} sections: </span>
+                                    <span>{{web3}} Element</span>
+                                </li>
+                            </ul>
+                            <p>Therefore this is a {{section3 flange3 web3}}.</p>
+                            {{#if perfilCustom}}
+                                <p>Note: Structural steel sections for both moderately ductile members and highly
+                                    ductile
+                                    members shall have flanges continuously connected to the web.</p>
+                            {{/if}}
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        {{/if}}
     </div>
 </template>
