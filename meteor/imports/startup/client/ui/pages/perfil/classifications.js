@@ -202,3 +202,10 @@ Template.classifications.helpers({
         return clas;
     }
 });
+
+// Template.classifications.events({
+//     'click div#both-info': function clickBackground(event, templateInstance) {
+//         console.log(templateInstance.data);
+//         templateInstance.ready = false;
+//     }
+// });

@@ -5,6 +5,9 @@ import './pages/login/login';
 import { Meteor } from 'meteor/meteor';
 
 Template.appbody.helpers({
+    devel() {
+        return Meteor.isDevelopment;
+    },
     language() {
         return Template.instance().language.get();
     },

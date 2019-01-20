@@ -209,9 +209,12 @@ Template.perfil.helpers({
     },
     data(material) {
         const perfilClass = Template.instance().perfilClass.get();
+        const ready = typeof Template.instance().perfilSelected.get() === 'string' &&
+            typeof Template.instance().materialSelected.get() === 'string';
+
         return {
             material,
-            ready: Template.instance().perfilSelected.get() && Template.instance().materialSelected.get(),
+            ready,
             perfil: perfilClass instanceof PerfilClass ? perfilClass.getData() : false,
             perfilCustom: Template.instance().perfilCustom.get(),
             phic: Template.instance().phi.get(),
